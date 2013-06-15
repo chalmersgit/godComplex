@@ -1,0 +1,138 @@
+﻿Build started 15/06/2013 8:56:30 p.m..
+     1>Project "C:\Users\Chalmers\Documents\godComplex\vc10\godComplex.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\godComplex.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Cinder\cinder\blocks\Leap\LeapSDK\include /IC:\Cinder\cinder\boost /IC:\Cinder\cinder\include /I..\include /I..\..\..\..\cinder\include /I..\..\..\..\cinder\boost /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D NOMINMAX /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\CloudController.cpp ..\src\CloudParticle.cpp ..\src\DirVector.cpp ..\src\godComplexApp.cpp ..\src\LeapController.cpp ..\src\VectorFlowField.cpp ..\src\VectorSet.cpp ..\src\WaterModule.cpp
+         WaterModule.cpp
+         VectorSet.cpp
+     1>c:\users\chalmers\documents\godcomplex\src\vectorset.cpp(39): warning C4244: 'argument' : conversion from 'float' to 'int32_t', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\vectorset.cpp(47): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\godcomplex\src\vectorset.cpp(48): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\godcomplex\src\vectorset.cpp(99): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\vectorset.cpp(100): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\vectorset.cpp(125): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\vectorset.cpp(126): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+         VectorFlowField.cpp
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(26): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(43): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(43): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(44): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(99): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(148): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(171): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\chalmers\documents\godcomplex\src\vectorflowfield.cpp(206): warning C4018: '<' : signed/unsigned mismatch
+         LeapController.cpp
+         godComplexApp.cpp
+     1>c:\users\chalmers\documents\godcomplex\src\godcomplexapp.cpp(258): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\godcomplex\src\godcomplexapp.cpp(258): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\godcomplex\src\godcomplexapp.cpp(258): warning C4305: 'argument' : truncation from 'double' to 'float'
+         DirVector.cpp
+         CloudParticle.cpp
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(26): warning C4101: 'activeControllersCount' : unreferenced local variable
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(30): warning C4101: 'maxIndices' : unreferenced local variable
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(29): warning C4101: 'minIndices' : unreferenced local variable
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(122): warning C4244: 'argument' : conversion from 'float' to 'int32_t', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(137): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(138): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(143): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(148): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\cloudparticle.cpp(331): warning C4018: '<' : signed/unsigned mismatch
+         CloudController.cpp
+     1>c:\users\chalmers\documents\godcomplex\src\cloudcontroller.cpp(125): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\godcomplex\src\cloudcontroller.cpp(125): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /IC:\Cinder\cinder\include /I..\..\..\..\cinder\include /I..\include /nologo /fo"Debug\Resources.res" Resources.rc 
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Chalmers\Documents\godComplex\vc10\Debug\godComplex.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Cinder\cinder\lib\msw /LIBPATH:C:\Cinder\cinder\lib /LIBPATH:..\..\..\..\cinder\lib /LIBPATH:..\..\..\..\cinder\lib\msw /LIBPATH:C:\Cinder\cinder\blocks\Leap\LeapSDK\lib\x86 cinder_d.lib leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:LIBCMT /NODEFAULTLIB:LIBCPMT /MANIFEST:NO /DEBUG /PDB:"C:\Users\Chalmers\Documents\godComplex\vc10\Debug\godComplex.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Chalmers\Documents\godComplex\vc10\Debug\godComplex.lib" /MACHINE:X86 Debug\Resources.res
+         Debug\CloudController.obj
+         Debug\CloudParticle.obj
+         Debug\DirVector.obj
+         Debug\godComplexApp.obj
+         Debug\LeapController.obj
+         Debug\VectorFlowField.obj
+         Debug\VectorSet.obj
+         Debug\WaterModule.obj
+     1>cinder_d.lib(Area.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(AxisAlignedBox.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(BSpline.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Buffer.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Camera.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Channel.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(DataSource.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(DataTarget.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Display.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Exception.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Font.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(ImageIo.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(ImageSourceFileWic.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(ImageTargetFileWic.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(CinderMath.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(ObjLoader.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Path2D.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Perlin.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Rand.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Ray.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Rect.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Shape2d.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Sphere.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Stream.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Surface.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Text.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Timeline.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(TimelineItem.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Timer.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Triangulate.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(TriMesh.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Unicode.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Url.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(UrlImplWinInet.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Utilities.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(App.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(AppBasic.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(AppImplMsw.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(AppImplMswBasic.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(AppImplMswRendererGdi.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(AppImplMswRendererGl.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(KeyEvent.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Renderer.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Fbo.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(gl.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(GLee.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(GlslProg.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Texture.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(VBO.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Fill.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(Flip.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(CinderMsw.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(CinderMswGdiPlus.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(StackWalker.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(bucketalloc.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(dict.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(geom.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(mesh.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(priorityq.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(sweep.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(tess.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(linebreak.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(linebreakdata.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(linebreakdef.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(zutil.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(trees.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(inftrees.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(inflate.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(inffast.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(deflate.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(crc32.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(compress.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+     1>cinder_d.lib(adler32.obj) : warning LNK4204: 'C:\Users\Chalmers\Documents\godComplex\vc10\Debug\vc100.pdb' is missing debugging information for referencing module; linking object as if no debug info
+         godComplex.vcxproj -> C:\Users\Chalmers\Documents\godComplex\vc10\Debug\godComplex.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\godComplex.unsuccessfulbuild".
+         Touching "Debug\godComplex.lastbuildstate".
+     1>Done Building Project "C:\Users\Chalmers\Documents\godComplex\vc10\godComplex.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:30.64
