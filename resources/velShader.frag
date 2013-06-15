@@ -38,6 +38,16 @@ uniform int checkUserInput;
 uniform float scaleX;
 uniform float scaleY;
 
+/*
+To make clouds, we need to not use velocity applied to particles.
+The noise created by velocity makes it look like fur or hair.
+We should move positions + colour the positions. So we should get particles
+shaped like a cloud + the alpha shows multiple clumped spots in a single cloud.
+
+From this, we should get nice looking clouds that are static within themselves.
+THEN, we can start applying *some* velocity (very minor effects) to get some rumbling.
+*/
+
 //float shift = 0.2;
 vec3 constructSquare(vec3 ov, vec3 v, float shift){
 	if(ov.y >= 0.25 && ov.y < 0.5){ //move to top right
@@ -84,7 +94,13 @@ void main(){
 	float age = texture2D( information, texCoord.st).r;
 	float maxAge = texture2D( information, texCoord.st).g;
     
-	vec2 noise = texture2D( noiseTex, pos.xy).rg;
+	vec2 noise = vec2( 0.0, 0.0);
+	noise += texture2D( noiseTex, pos.xy).rg;
+	noise += texture2D( noiseTex, pos.xy+1).rg;
+	noise += texture2D( noiseTex, pos.xy+2).rg;
+	noise += texture2D( noiseTex, pos.xy+3).rg;
+	
+	
 	vec3 origPos = texture2D(oPositions, texCoord.st).rgb;
 	
 	//if(noise.x < 0.0){
@@ -109,7 +125,6 @@ void main(){
     
     
 	//Shape particles
-//    /*
 	for(int i = 0; i < maxControllers; i++){
 		float maxValue = controllerMaxIndices[i];
 		if(maxValue >= 1.0){maxValue = 2.0;}
@@ -124,14 +139,18 @@ void main(){
 			//float amtx = origPos.x;
 			//float amty = origPos.y;
 			
-			amt *= 0.5;          //NOTE: cloud size
+			amt *= 0.05; //NOTE: cloud size
 			//amty *= 0.5;
 			
 			pos.x =  cos(theta)*(-amt)*2.0 + controllers[i].x;
 			pos.y =  -sin(theta)*(-amt)*2.0 + controllers[i].y;
 			
+			
+			
             vec2 controllerDir = controllers[i] - prevControllers[i];
+			normalize(controllerDir);
             vec2 particleFromCenter = pos.xy - controllers[i];
+			normalize(particleFromCenter);
             float forceScaler = dot(controllerDir, particleFromCenter);
             forceScaler = (forceScaler + 1.0) / 2.0;
             
@@ -150,7 +169,6 @@ void main(){
             //break! add this for efficiency 
 		}
 	}
-//	*/
     
      
 	/*
@@ -215,27 +233,7 @@ void main(){
 		if( x+y < 50.0){
 			vel.x = -vel.x;
 		}
-		/*
-         float x2 = (controller2.x - (scaleX*pos.x)) * (controller2.x - (scaleX*pos.x));
-         float y2 = (controller2.y - (scaleY*pos.y)) * (controller2.y - (scaleY*pos.y));
-         if( x2+y2 < 50.0){
-         vel.x = -vel.x;
-         }
-         
-         
-         float x3 = (controller3.x - (scaleX*pos.x)) * (controller3.x - (scaleX*pos.x));
-         float y3 = (controller3.y - (scaleY*pos.y)) * (controller3.y - (scaleY*pos.y));
-         if( x3+y3 < 50.0){
-         vel.x = -vel.x;
-         }
-         
-         float x4 = (controller4.x - (scaleX*pos.x)) * (controller4.x - (scaleX*pos.x));
-         float y4 = (controller4.y - (scaleY*pos.y)) * (controller4.y - (scaleY*pos.y));
-         if( x4+y4 < 50.0){
-         vel.x = -vel.x;
-         }*/
 	}
-    ///*
 	if(checkUserInput >= 1){
 		float x = (finger1.x - (scaleX*pos.x)) * (finger1.x - (scaleX*pos.x));
 		float y = (finger1.y - (scaleY*pos.y)) * (finger1.y - (scaleY*pos.y));
@@ -271,9 +269,6 @@ void main(){
 			vel.x = -vel.x;
 		}
 	}
-    //    */
-    
-    
     
 	//Add noise to the particles
 	pos.x += (vel.x);
