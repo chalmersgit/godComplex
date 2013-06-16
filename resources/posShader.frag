@@ -4,14 +4,16 @@
 uniform sampler2D posTex;
 uniform sampler2D velTex;
 uniform sampler2D infTex;
+
 uniform sampler2D oPosTex;
+uniform sampler2D noiseTex;
 
 uniform sampler2D spriteTex;
 varying vec4 texCoord;
 
 varying float age;
 
-uniform vec2	sample_offset;
+uniform vec2 sample_offset;
 
 //What needs to happen:
 //Uniform controller, take distance from controller to determine alpha
@@ -22,22 +24,38 @@ uniform float controllerMaxIndices[16];
 
 void main()
 {
+	//vec3 pos = texture2D( posTex, texCoord.st).rgb;
+	
+	vec2 noise = vec2( 0.0, 0.0);
+	noise += texture2D( noiseTex, gl_TexCoord[0].xy).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+1).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+2).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+3).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+4).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+5).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+6).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+7).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+8).rg;
+	
+	
     vec3 origPos = texture2D( oPosTex, gl_TexCoord[0].st ).rgb;
-    
     float alph = 1.0;
-    
     for(int i = 0; i < maxControllers; i++){
 		float maxValue = controllerMaxIndices[i];
 		if(maxValue >= 1.0){maxValue = 2.0;}
         if(origPos.x >= controllerMinIndices[i] && origPos.x < maxValue){
             vec2 fromCenter = gl_TexCoord[0].xy - controllers[i];
-            alph = length(fromCenter) / 150.0;
+			normalize(fromCenter);
+			float distScale = length(fromCenter);
+            alph = (0.001 / distScale);// + noise;
+			
         }
 	}
-
-    if(alph > 0.8){
-        alph = 0.8;
-    }
+	
+	
+    //if(alph > 0.8){
+    //    alph = 0.8;
+    //}
 	/*
      vec4 colFac = vec4(1.0);//texture2D(spriteTex, gl_PointCoord);
      //colFac.rgb *= texture2D( posTex, gl_TexCoord[0].st ).rgb;

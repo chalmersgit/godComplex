@@ -73,7 +73,7 @@ void CloudController::update(){
 }
 
 void CloudController::draw(){
-/*
+
 	//console() << mCol << endl;
 	glPushMatrix();
 	
@@ -91,14 +91,14 @@ void CloudController::draw(){
 	glPopMatrix();
 	
 	
-	
+	/*
 	if(mCloudParticle !=NULL){
 	 //console() << mCol << endl;
 	 glPushMatrix();
 	 mCloudParticle->draw();
 	 glPopMatrix();
-	 }*/
-	
+	 }
+	*/
 }
 
 

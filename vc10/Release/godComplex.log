@@ -1,4 +1,4 @@
-﻿Build started 16/06/2013 12:46:13 a.m..
+﻿Build started 17/06/2013 10:33:33 a.m..
      1>Project "C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\godComplex.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Release\godComplex.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -28,4 +28,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.07
+Time Elapsed 00:00:02.84

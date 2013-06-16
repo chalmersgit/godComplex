@@ -96,9 +96,9 @@ void main(){
     
 	vec2 noise = vec2( 0.0, 0.0);
 	noise += texture2D( noiseTex, pos.xy).rg;
-	noise += texture2D( noiseTex, pos.xy+1).rg;
-	noise += texture2D( noiseTex, pos.xy+2).rg;
-	noise += texture2D( noiseTex, pos.xy+3).rg;
+	//noise += texture2D( noiseTex, pos.xy+1).rg;
+	//noise += texture2D( noiseTex, pos.xy+2).rg;
+	//noise += texture2D( noiseTex, pos.xy+3).rg;
 	
 	
 	vec3 origPos = texture2D(oPositions, texCoord.st).rgb;
@@ -139,14 +139,14 @@ void main(){
 			//float amtx = origPos.x;
 			//float amty = origPos.y;
 			
-			amt *= 0.05; //NOTE: cloud size
+			amt *= 0.1; //NOTE: cloud size
 			//amty *= 0.5;
 			
 			pos.x =  cos(theta)*(-amt)*2.0 + controllers[i].x;
 			pos.y =  -sin(theta)*(-amt)*2.0 + controllers[i].y;
 			
 			
-			
+			/*
             vec2 controllerDir = controllers[i] - prevControllers[i];
 			normalize(controllerDir);
             vec2 particleFromCenter = pos.xy - controllers[i];
@@ -157,7 +157,7 @@ void main(){
             forceScaler = 1.0 - forceScaler;
             forceScaler *= 10.0;
             vel.xy += (-controllerDir) * forceScaler;
-            
+            */
 			
 			
 			//pos.x =  cos(theta) + controllers[i].x;

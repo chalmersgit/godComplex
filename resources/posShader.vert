@@ -29,7 +29,7 @@ void main()
 	newVertexPos = vec4((scaleX * dv.x), (scaleY * dv.y), (scaleX * sin(dv.z)*5.0), 1.0);
 	
 	//adjust point size, increasing size kills performance
-	gl_PointSize = 3.0 - (1.0 * age);
+	gl_PointSize = 8.0 - (1.0 * age);
     
 	gl_Position = gl_ModelViewProjectionMatrix * newVertexPos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;

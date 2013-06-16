@@ -422,6 +422,7 @@ void CloudParticle::draw(){
 	mPosShader.uniform("velTex", mVel);
 	mPosShader.uniform("infTex", mInfo);
 	mPosShader.uniform("oPosTex", 4);
+	mPosShader.uniform("noiseTex", mNoise);
 	mPosShader.uniform("spriteTex", mSprite);
 	mPosShader.uniform("scaleX",(float)PARTICLES_X);
 	mPosShader.uniform("scaleY",(float)PARTICLES_Y);
@@ -435,7 +436,7 @@ void CloudParticle::draw(){
 	//gl::color(ColorA(1.0f,1.0f,1.0f,0.0f));
 	gl::pushMatrices();
 	
-	//	glScalef(getWindowWidth() / (float)PARTICLES , getWindowHeight() / (float)PARTICLES ,1.0f);
+	//glScalef(getWindowWidth() / (float)PARTICLES , getWindowHeight() / (float)PARTICLES ,1.0f);
 	//glScalef(0.5, 0.5, 0.5);
 	//console() << "Loc: " << mLoc << endl;
 	gl::translate(mLoc);
