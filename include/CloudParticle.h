@@ -25,6 +25,8 @@
 
 #include "LeapController.h"
 
+#include "cinder/params/Params.h"
+
 using namespace ci;
 using namespace std;
 
@@ -108,5 +110,17 @@ public:
 	vector<CloudController*>* mCloudControllers;
 	
 	TriMesh			mMesh;
+
+	//GUI, and associated fields
+	params::InterfaceGl	mParams;
+	float				cloudCover;
+	float				cloudSharpness;
+	bool				mCentralGravity;
+	int					mCountrySelect;
+	int					mPrevCountrySelect;
+	bool				mPause;
+
+	Quatf				mSceneRotation;
+	float				mCameraDistance;
 };
 

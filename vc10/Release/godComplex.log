@@ -1,9 +1,19 @@
-﻿Build started 17/06/2013 10:33:33 a.m..
+﻿Build started 18/06/2013 10:55:06 p.m..
      1>Project "C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\godComplex.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Release\godComplex.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Cinder\cinder\blocks\Leap\LeapSDK\include /IC:\Cinder\cinder\boost /IC:\Cinder\cinder\include /I..\include /I..\..\..\..\cinder\include /I..\..\..\..\cinder\boost /Zi /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D NOMINMAX /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\CloudParticle.cpp
+         CloudParticle.cpp
+     1>..\src\CloudParticle.cpp(31): warning C4101: 'activeControllersCount' : unreferenced local variable
+     1>..\src\CloudParticle.cpp(35): warning C4101: 'maxIndices' : unreferenced local variable
+     1>..\src\CloudParticle.cpp(34): warning C4101: 'minIndices' : unreferenced local variable
+     1>..\src\CloudParticle.cpp(127): warning C4244: 'argument' : conversion from 'float' to 'int32_t', possible loss of data
+     1>..\src\CloudParticle.cpp(142): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>..\src\CloudParticle.cpp(143): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>..\src\CloudParticle.cpp(148): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>..\src\CloudParticle.cpp(153): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>..\src\CloudParticle.cpp(357): warning C4018: '<' : signed/unsigned mismatch
        ResourceCompile:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /IC:\Cinder\cinder\include /I..\..\..\..\cinder\include /I..\include /nologo /fo"Release\Resources.res" Resources.rc 
        Link:
@@ -28,4 +38,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.84
+Time Elapsed 00:00:06.07

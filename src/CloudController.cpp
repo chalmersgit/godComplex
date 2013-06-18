@@ -73,32 +73,13 @@ void CloudController::update(){
 }
 
 void CloudController::draw(){
-
-	//console() << mCol << endl;
-	glPushMatrix();
 	
+	glPushMatrix();
 	Rectf rect(mLoc.x, mLoc.y, mLoc.x + mRadius, mLoc.y + mRadius);
 	gl::color(Color(mCol.x, mCol.y, mCol.z));
-	
-	if(mCol.x >= 1){
-		//console() << "blue: " << mLoc << endl;
-		gl::drawSolidRect(rect);
-	}
-	else{
-		gl::drawSolidRect(rect);
-	}
-	
+	gl::drawSolidRect(rect);
 	glPopMatrix();
 	
-	
-	/*
-	if(mCloudParticle !=NULL){
-	 //console() << mCol << endl;
-	 glPushMatrix();
-	 mCloudParticle->draw();
-	 glPopMatrix();
-	 }
-	*/
 }
 
 

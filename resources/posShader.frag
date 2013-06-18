@@ -22,8 +22,8 @@ uniform vec2 controllers[16];
 uniform float controllerMinIndices[16];
 uniform float controllerMaxIndices[16];
 
-float cloudCover = 0.5;
-float cloudSharpness = 0.5;
+uniform float cloudCover; // = 0.5;
+uniform float cloudSharpness; // = 0.5;
 
 
 float cloudExpCurve(float v){
@@ -39,21 +39,26 @@ float cloudExpCurve(float v){
 void main()
 {
 	vec3 pos = texture2D( posTex, texCoord.st).rgb;
-	//vec3 pos = texture2D( positions, texCoord.st).rgb;
+	vec3 origPos = texture2D( oPosTex, gl_TexCoord[0].st ).rgb;
+	
+	vec3 vel = texture2D( velTex, texCoord.st).rgb;
+	float decay = texture2D( velTex, texCoord.st).a;
+	
+	
 	
 	vec2 noise = vec2( 0.0, 0.0);
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+1).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+2).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+3).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+4).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+5).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+6).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+7).rg;
-	noise += texture2D( noiseTex, gl_TexCoord[0].xy+8).rg;
+	noise += texture2D( noiseTex, pos.xy).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+1).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+2).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+3).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+4).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+5).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+6).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+7).rg;
+	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+8).rg;
 	
 	
-    vec3 origPos = texture2D( oPosTex, gl_TexCoord[0].st ).rgb;
+    
     float alph = 1.0;
     for(int i = 0; i < maxControllers; i++){
 		float maxValue = controllerMaxIndices[i];
@@ -61,15 +66,15 @@ void main()
         if(origPos.x >= controllerMinIndices[i] && origPos.x < maxValue){
             vec2 fromCenter = pos.xy - controllers[i];
 			//normalize(fromCenter);
-			float distScale = (length(fromCenter)/2); //TODO check division
-            alph = (0.0001/distScale) + (noise);// * 10.0);
+			float distScale = length(fromCenter); //TODO check division
+            alph = (0.0001/distScale); // + (noise);// * 10.0);
 			
 			break;
         }
 	}
 	//alph = pos.x/20;
 	
-	//alph = cloudExpCurve(alph);
+	alph = cloudExpCurve(vel.y * 20);
 	
 
 	

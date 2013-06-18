@@ -82,13 +82,14 @@ vec3 addVariation(vec3 v, vec2 controller){
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
-
+//vec3 vel = vec3( 0.0, 0.0, 0.0);
 void main(){
 	vec3 pos = texture2D( positions, texCoord.st).rgb;
 	
 	float mass = texture2D( positions, texCoord.st).a;
     
 	vec3 vel = texture2D( velocities, texCoord.st).rgb;
+	
 	float decay = texture2D( velocities, texCoord.st).a;
     
 	float age = texture2D( information, texCoord.st).r;
@@ -107,11 +108,14 @@ void main(){
 	//if(noise.x < 0.0){
 	//	noise.x *= -1;
 	//}
+	
 	vel += vec3(noise.x,noise.y,0.0);
 	
 	
 	//Life/death cycle
 	age += tStep;
+	
+
 	
 	if( age >= maxAge ){
 		vec3 origVel = texture2D(oVelocities, texCoord.st).rgb;
@@ -121,8 +125,9 @@ void main(){
 			pos = origPos;
 		}
 		vel = origVel;
+		//vel = vec3( 0.0, 0.0, 0.0);
 	}
-    
+
     
     
 	//Shape particles
@@ -277,8 +282,8 @@ void main(){
 	}
     
 	//Add noise to the particles
-	pos.x += (vel.x);
-	pos.y += (vel.y);
+	//pos.x += (vel.x);
+	//pos.y += (vel.y);
 	
 	
 	
