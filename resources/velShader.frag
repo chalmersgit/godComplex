@@ -96,9 +96,10 @@ void main(){
     
 	vec2 noise = vec2( 0.0, 0.0);
 	noise += texture2D( noiseTex, pos.xy).rg;
-	//noise += texture2D( noiseTex, pos.xy+1).rg;
-	//noise += texture2D( noiseTex, pos.xy+2).rg;
-	//noise += texture2D( noiseTex, pos.xy+3).rg;
+	noise += texture2D( noiseTex, pos.xy+1).rg;
+	noise += texture2D( noiseTex, pos.xy+2).rg;
+	noise += texture2D( noiseTex, pos.xy+3).rg;
+	//noise /= 4.0;
 	
 	
 	vec3 origPos = texture2D(oPositions, texCoord.st).rgb;
@@ -132,18 +133,23 @@ void main(){
 			//pos.x = controllerMaxIndices[i] - origPos.x + controllers[i].x;
 			//pos.y = origPos.y + controllers[i].y;
 			
-			
-			float theta = rand(origPos.xy)*M_PI*2.0;
 			float offset = controllerMaxIndices[i] - controllerMinIndices[i];
-			float amt = max(offset-abs(offset-origPos.x), offset-abs(offset-origPos.y));
+			float theta = rand(vec2((origPos.x - offset), origPos.y))*M_PI*2.0;
+			//float theta = origPos.xy * M_PI; //* 12.0;
+			//float amt = max(offset-abs(offset-origPos.x), offset-abs(offset-origPos.y));
+			float amt = max(offset-abs(origPos.x - offset),origPos.y);
 			//float amtx = origPos.x;
 			//float amty = origPos.y;
 			
-			amt *= 0.1; //NOTE: cloud size
-			//amty *= 0.5;
+			
+			amt *= (0.08);// + (texture2D( noiseTex, pos.xy).rg)) * 4; //NOTE: cloud size
+			//amt = 0.1;
 			
 			pos.x =  cos(theta)*(-amt)*2.0 + controllers[i].x;
 			pos.y =  -sin(theta)*(-amt)*2.0 + controllers[i].y;
+			
+			//pos.x =  cos(theta)*2.0 + controllers[i].x;
+			//pos.y =  -sin(theta)*2.0 + controllers[i].y;
 			
 			
 			/*
@@ -166,7 +172,7 @@ void main(){
 			//pos = constructSquare(origPos, pos, controllerMaxIndices[i] - controllerMinIndices[i]);
 			//pos = addVariation(pos, controllers[i]);
             
-            //break! add this for efficiency 
+            break; //add this for efficiency 
 		}
 	}
     
