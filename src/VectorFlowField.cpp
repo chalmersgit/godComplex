@@ -41,7 +41,7 @@ void VectorFlowField::setup()
 	for(int i = 0; i < 5; ++i){
 		glPushMatrix();
 		Vec2f loc = Vec2f(Rand::randFloat(0.0f, app::getWindowWidth()), Rand::randFloat(0.0f, app::getWindowHeight()));
-		CloudController* cloudController = new CloudController(loc, Rand::randFloat(0.1, 1.0), Rand::randFloat(0.1f, 0.1f), mParticleController);
+		CloudController* cloudController = new CloudController(loc, Rand::randFloat(0.1, 0.3), Rand::randFloat(0.01f, 0.01f), mParticleController);
 		
 		if(i == 1){
 			cloudController->setColor(Vec3f(1, 0, 0));

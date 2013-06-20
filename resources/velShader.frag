@@ -130,7 +130,8 @@ void main(){
 	
 	//Life/death cycle
 	
-	/*age += tStep;
+	/*
+	age += tStep;
 	if( age >= maxAge ){
 		vec3 origVel = texture2D(oVelocities, texCoord.st).rgb;
 		age = 0.0;
@@ -138,7 +139,8 @@ void main(){
 			pos = origPos;
 		}
 		vel = origVel;
-	}*/
+	}
+	*/
 	
 	//vec3 tempPos = vec3(0, 0, 0);
 	//Shape particles

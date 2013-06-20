@@ -342,19 +342,33 @@ void CloudParticle::setup()
 	*/
 
 	//Tailored setup
+	//1
+	/*
 	cloudCover = 0.5074;
 	cloudSharpness = 0.8842;
 	pointSize = 3;
 	cloudSize = 0.10;
 	testAlpha = 0.01;
 	noiseLevel = 7;
-	noiseMultiplier = 300;
+	noiseMultiplier = 1;
 	posDivide = 1;
 	velSpeed = 0.000005;
 	accTimer = 0.5;
 	fingerRadius = 500.0;
+	*/
 
-	
+	//2
+	cloudCover = 0.5074;
+	cloudSharpness = 0.9063;
+	pointSize = 6;
+	cloudSize = 0.07;
+	testAlpha = 0.01;
+	noiseLevel = 7;
+	noiseMultiplier = 1;
+	posDivide = 1;
+	velSpeed = 0.000005;
+	accTimer = 0.5;
+	fingerRadius = 500.0;	
 }
 
 void CloudParticle::setPos(Vec2f loc)
@@ -439,10 +453,7 @@ void CloudParticle::update()
 	mVelShader.uniform("controller3", (*mCloudControllers)[2]->mLoc / particleTexRes);
 	mVelShader.uniform("controller4", (*mCloudControllers)[3]->mLoc / particleTexRes);
 	
-	
-//	/*
-	
-	
+	//Leap
 	if(mLeapController->hasFingers){
 		for(int i = 0; i < mLeapController->fingerPositions.size(); i++){
 			float leap_x = mLeapController->fingerPositions[i].x;
@@ -481,24 +492,21 @@ void CloudParticle::update()
 				default:
 					break;
 				}
-	 
+				
 				//mVelShader.uniform("finger1", Vec2f(newX, newY)); //leap_x, leap_y));
 				mVelShader.uniform("checkUserInput",  mLeapController->numActiveFingers);
 			}
 		}
-	 //float leap_x = mLeapController->avgPos.x;
-	 //float leap_y = mLeapController->avgPos.y;
 	}
 	else{
 		mVelShader.uniform("mousePos", mMousePos);
 		mVelShader.uniform("checkUserInput", mMouseDownInt);
 	}
-//    */
+	
 	mVelShader.uniform("leapFingersPos", leapFingersPos, 80);
 	mVelShader.uniform("leapFingersVel", leapFingersVel, 80);
 	mVelShader.uniform("maxFingers", mLeapController->numActiveFingers);
-
-
+	
 	mVelShader.uniform("scaleX",(float)PARTICLES_X);
 	mVelShader.uniform("scaleY",(float)PARTICLES_Y);
 	

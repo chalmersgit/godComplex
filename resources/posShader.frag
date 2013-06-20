@@ -47,20 +47,14 @@ float rand(vec2 co){
 void main()
 {
 	vec3 pos = texture2D( posTex, texCoord.st).rgb;
-	vec3 origPos = texture2D( oPosTex, gl_TexCoord[0].st ).rgb;
+	float alph = 1.0;
 	
+	
+	vec3 origPos = texture2D( oPosTex, texCoord.st ).rgb;
+	/*
 	vec3 vel = texture2D( velTex, texCoord.st).rgb;
 	float decay = texture2D( velTex, texCoord.st).a;
-	
-	
 	vec2 tempPos = vec2(0.0, 0.0);
-	/*float theta = rand(vec2(origPos.x, origPos.y))*M_PI*2.0;
-	float amt = max(origPos.x, origPos.y);
-	amt *= 0.08;
-	tempPos.x =  cos(theta)*(-amt)*2.0;
-	tempPos.y =  -sin(theta)*(-amt)*2.0;*/
-	
-    float alph = 1.0;
     for(int i = 0; i < maxControllers; i++){
 		float maxValue = controllerMaxIndices[i];
 		if(maxValue >= 1.0){maxValue = 2.0;}
@@ -73,37 +67,24 @@ void main()
 			tempPos.y =  -sin(theta)*(-amt)*2.0;// + controllers[i].y;
 			
 			//Distance from center
-			/*
             vec2 fromCenter = pos.xy - controllers[i];
 			//normalize(fromCenter);
 			float distScale = length(fromCenter); //TODO check division
             alph = (0.0001/distScale); // + (noise);// * 10.0);
-			*/
 			
 			break;
         }
 	}
+	*/
 	
 	vec2 noise = vec2( 0.0, 0.0);
-	//noise += texture2D( noiseTex, pos.xy).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+1).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+2).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+3).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+4).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+5).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+6).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+7).rg;
-	//noise += texture2D( noiseTex, gl_TexCoord[0].xy+8).rg;
 	for(int i = 0; i <= noiseLevel; i++){
 		noise += texture2D( noiseTex, pos.xy + i).rg;
 	}
+	alph = cloudExpCurve(testAlpha + noise.y * noiseMultiplier);
+	//alph = testAlpha;
+	//alph = cloudExpCurve(vel.y * noiseMultiplier);	
 	
-	alph = testAlpha;
-	
-	//alph = cloudExpCurve(vel.y * noiseMultiplier);
-	//alph = cloudExpCurve(testAlpha + noise.y * noiseMultiplier);
-	
-
 	
 	/*
      vec4 colFac = vec4(1.0);//texture2D(spriteTex, gl_PointCoord);

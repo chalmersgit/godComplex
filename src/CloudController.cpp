@@ -50,7 +50,7 @@ void CloudController::update(){
 	mVel += mAcc;
 	mVel.limit(mMaxSpeed);
 	prevmLoc = mLoc;
-	//mLoc += mVel;
+	mLoc += mVel;
 	
 	//?
 	mAcc *= mMaxForce;
