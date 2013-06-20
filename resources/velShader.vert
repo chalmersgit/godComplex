@@ -4,6 +4,8 @@ uniform sampler2D positions;
 uniform sampler2D velocities;
 uniform sampler2D information;
 
+uniform sampler2D oPositions2;
+
 varying vec4 texCoord;
 
 void main()

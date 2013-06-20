@@ -49,7 +49,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Cinder\cinder\blocks\Leap\LeapSDK\include;C:\Cinder\cinder\boost;C:\Cinder\cinder\include;..\include;..\..\..\..\cinder\include;..\..\..\..\cinder\boost</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Oliver\cinder\blocks\Leap\LeapSDK\include;C:\Cinder\cinder\blocks\Leap\LeapSDK\include;C:\Cinder\cinder\boost;C:\Cinder\cinder\include;..\include;..\..\..\..\cinder\include;..\..\..\..\cinder\boost</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -65,7 +65,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder_d.lib;leapd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Cinder\cinder\lib\msw;C:\Cinder\cinder\lib;..\..\..\..\cinder\lib;..\..\..\..\cinder\lib\msw;C:\Cinder\cinder\blocks\Leap\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Oliver\cinder\blocks\Leap\LeapSDK\lib\x86;C:\Cinder\cinder\lib\msw;C:\Cinder\cinder\lib;..\..\..\..\cinder\lib;..\..\..\..\cinder\lib\msw;C:\Cinder\cinder\blocks\Leap\LeapSDK\lib\x86</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -80,7 +80,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Cinder\cinder\blocks\Leap\LeapSDK\include;C:\Cinder\cinder\boost;C:\Cinder\cinder\include;..\include;..\..\..\..\cinder\include;..\..\..\..\cinder\boost</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Oliver\cinder\blocks\Leap\LeapSDK\include;C:\Cinder\cinder\blocks\Leap\LeapSDK\include;C:\Cinder\cinder\boost;C:\Cinder\cinder\include;..\include;..\..\..\..\cinder\include;..\..\..\..\cinder\boost</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
@@ -97,7 +97,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder.lib;Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Cinder\cinder\lib\msw;C:\Cinder\cinder\lib;..\..\..\..\cinder\lib;..\..\..\..\cinder\lib\msw;C:\Cinder\cinder\blocks\Leap\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Oliver\cinder\blocks\Leap\LeapSDK\lib\x86;C:\Cinder\cinder\lib\msw;C:\Cinder\cinder\lib;..\..\..\..\cinder\lib;..\..\..\..\cinder\lib\msw;C:\Cinder\cinder\blocks\Leap\LeapSDK\lib\x86</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>false</GenerateMapFile>
       <SubSystem>Windows</SubSystem>

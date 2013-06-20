@@ -7,6 +7,8 @@ uniform sampler2D oVelocities;
 uniform sampler2D oPositions;
 uniform sampler2D noiseTex;
 
+uniform sampler2D oPositions2;
+
 varying vec4 texCoord;
 
 float tStep = 0.01;
@@ -14,11 +16,24 @@ float M_PI = 3.1415926535897932384626433832795;
 
 uniform vec2 mousePos;
 
+//Leap
+uniform vec2 leapFingersPos[40];
+uniform vec2 leapFingersVel[40];
+uniform int maxFingers;
+
 uniform vec2 finger1;
 uniform vec2 finger2;
 uniform vec2 finger3;
 uniform vec2 finger4;
 uniform vec2 finger5;
+
+uniform vec2 fingerVel1;
+uniform vec2 fingerVel2;
+uniform vec2 fingerVel3;
+uniform vec2 fingerVel4;
+uniform vec2 fingerVel5;
+
+uniform float fingerRadius;
 
 uniform int maxControllers;
 uniform vec2 prevControllers[16];
@@ -37,6 +52,12 @@ uniform int checkUserInput;
 //Leap scaling
 uniform float scaleX;
 uniform float scaleY;
+
+uniform float cloudSize;
+uniform float velSpeed;
+uniform float accTimer;
+
+uniform bool firstTime;
 
 /*
 To make clouds, we need to not use velocity applied to particles.
@@ -85,215 +106,149 @@ float rand(vec2 co){
 //vec3 vel = vec3( 0.0, 0.0, 0.0);
 void main(){
 	vec3 pos = texture2D( positions, texCoord.st).rgb;
-	
 	float mass = texture2D( positions, texCoord.st).a;
     
 	vec3 vel = texture2D( velocities, texCoord.st).rgb;
-	
 	float decay = texture2D( velocities, texCoord.st).a;
-    
+	
 	float age = texture2D( information, texCoord.st).r;
 	float maxAge = texture2D( information, texCoord.st).g;
-    
-	vec2 noise = vec2( 0.0, 0.0);
-	noise += texture2D( noiseTex, pos.xy).rg;
-	noise += texture2D( noiseTex, pos.xy+1).rg;
-	noise += texture2D( noiseTex, pos.xy+2).rg;
-	noise += texture2D( noiseTex, pos.xy+3).rg;
-	//noise /= 4.0;
-	
-	
+	vec2 acc = texture2D( information, texCoord.st).ba;
 	vec3 origPos = texture2D(oPositions, texCoord.st).rgb;
 	
-	//if(noise.x < 0.0){
-	//	noise.x *= -1;
-	//}
 	
-	vel += vec3(noise.x,noise.y,0.0);
+	vec2 noise = vec2( 0.0, 0.0);
+	noise += texture2D( noiseTex, pos.xy).rg;
+	noise += texture2D( noiseTex, (pos.xy+1)).rg;
+	noise += texture2D( noiseTex, (pos.xy+2)).rg;
+	noise += texture2D( noiseTex, (pos.xy+3)).rg;
+	//noise /= 4.0;
+	
+	//vel += vec3(noise.x,noise.y,0.0);
+	//vel.x += 0.001;
 	
 	
 	//Life/death cycle
-	age += tStep;
 	
-
-	
+	/*age += tStep;
 	if( age >= maxAge ){
 		vec3 origVel = texture2D(oVelocities, texCoord.st).rgb;
 		age = 0.0;
-		
 		if(pos.x > 1.0 || pos.x < 0.0 || pos.y > 1.0 || pos.y < 0.0 ){
 			pos = origPos;
 		}
 		vel = origVel;
-		//vel = vec3( 0.0, 0.0, 0.0);
-	}
-
-    
-    
+	}*/
+	
+	//vec3 tempPos = vec3(0, 0, 0);
 	//Shape particles
 	for(int i = 0; i < maxControllers; i++){
 		float maxValue = controllerMaxIndices[i];
 		if(maxValue >= 1.0){maxValue = 2.0;}
 		if(origPos.x >= controllerMinIndices[i] && origPos.x < maxValue){
-			//pos.x = controllerMaxIndices[i] - origPos.x + controllers[i].x;
-			//pos.y = origPos.y + controllers[i].y;
-			
 			float offset = controllerMaxIndices[i] - controllerMinIndices[i];
 			float theta = rand(vec2((origPos.x - offset), origPos.y))*M_PI*2.0;
-			//float theta = origPos.xy * M_PI; //* 12.0;
-			//float amt = max(offset-abs(offset-origPos.x), offset-abs(offset-origPos.y));
 			float amt = max(offset-abs(origPos.x - offset),origPos.y);
-			//float amtx = origPos.x;
-			//float amty = origPos.y;
+			amt *= (cloudSize);
 			
-			
-			amt *= (0.08);// + (texture2D( noiseTex, pos.xy).rg)) * 4; //NOTE: cloud size
-			//amt = 0.1;
-			
-			pos.x =  cos(theta)*(-amt)*2.0 + controllers[i].x;
-			pos.y =  -sin(theta)*(-amt)*2.0 + controllers[i].y;
-			
-			//pos.x =  cos(theta)*2.0 + controllers[i].x;
-			//pos.y =  -sin(theta)*2.0 + controllers[i].y;
-			
-			
-			/*
-            vec2 controllerDir = controllers[i] - prevControllers[i];
-			normalize(controllerDir);
-            vec2 particleFromCenter = pos.xy - controllers[i];
-			normalize(particleFromCenter);
-            float forceScaler = dot(controllerDir, particleFromCenter);
-            forceScaler = (forceScaler + 1.0) / 2.0;
-            
-            forceScaler = 1.0 - forceScaler;
-            forceScaler *= 10.0;
-            vel.xy += (-controllerDir) * forceScaler;
-            */
-			
-			
-			//pos.x =  cos(theta) + controllers[i].x;
-			//pos.y =  - sin(theta) + controllers[i].y;
-			
-			//pos = constructSquare(origPos, pos, controllerMaxIndices[i] - controllerMinIndices[i]);
-			//pos = addVariation(pos, controllers[i]);
-            
-            break; //add this for efficiency 
+			pos.x = cos(theta)*(-amt)*2.0 + controllers[i].x;
+			pos.y = -sin(theta)*(-amt)*2.0 + controllers[i].y;
+			break;
 		}
 	}
-    
-     
-	/*
-     if(origPos.x < 0.5 && origPos.y < 0.5){
-     //Squares the particles
-     
-     float theta = rand(origPos.xy)*M_PI*2.0;
-     float amt = max(.25-abs(.25-origPos.x), .25-abs(.25-origPos.y));//(maxAmt*2.0) - distance(vec2(0.25, 0.25) , origPos.xy);
-     amt *= 0.5;//cloud size
-     pos.x =   cos(theta)*(-amt)*2.0 + controller1.x;
-     pos.y =  - sin(theta)*(-amt) + controller1.y;
-     
-     
-     //Add variation
-     float thresh = 0.25;
-     vec2 dirVal = vec2(pos.x - controller1.x, pos.y - controller1.y);
-     float distSqrd = length(dirVal) * length(dirVal);
-     float percent = distSqrd/0.25;
-     float threshDelta = 1.0 - thresh;
-     float adjustedPercent = ( percent - thresh )/threshDelta;
-     }*/
-    
 	
-	/* Hard Coded
-     //Line up the particles with their controllers
-     if(origPos.x < 0.25){
-     //Squares the particles
-     pos.x = 0.25 - origPos.x + controller1.x;
-     pos.y = origPos.y + controller1.y;
-     
-     pos = constructSquare(origPos, pos);
-     pos = addVariation(pos, controller1);
-     }
-     if(origPos.x >= 0.25 && origPos.x < 0.5){
-     pos.x = 0.5 - origPos.x + controller2.x;
-     pos.y = origPos.y + controller2.y;
-     
-     pos = constructSquare(origPos, pos);
-     pos = addVariation(pos, controller2);
-     }
-     
-     if(origPos.x >= 0.5 && origPos.x < 0.75){
-     pos.x = 0.75 - origPos.x + controller3.x;
-     pos.y = origPos.y + controller3.y;
-     
-     pos = constructSquare(origPos, pos);
-     pos = addVariation(pos, controller3);
-     }
-     if(origPos.x >= 0.75){
-     pos.x = 1 - origPos.x + controller4.x;
-     pos.y = origPos.y + controller4.y;
-     
-     pos = constructSquare(origPos, pos);
-     pos = addVariation(pos, controller4);
-     }
-     */
+	
+	pos.x += vel.x;
+	pos.y += vel.y;
+	
+	if(decay > 0){
+		vel += vec3(acc, 0.0)*decay;
+		decay -= tStep;
+	}
+	
+    //acc = vec2(0, -9.81); /* Constant acceleration: gravity */
+    //vel = vel + acc * dt;    /* New, timestep-corrected velocity */
+    //pos = pos + vel * dt;      /* New, timestep-corrected position */
 	
 	//Particle interaction
 	if(checkUserInput == -1){
 		float x = (mousePos.x - (scaleX*pos.x)) * (mousePos.x - (scaleX*pos.x));
 		float y = (mousePos.y - (scaleY*pos.y)) * (mousePos.y - (scaleY*pos.y));
-		if( x+y < 50.0){
-			vel.x = -vel.x;
+		if( x+y < fingerRadius){
+			acc.x += 0.01;
 		}
 	}
+	
+	//uniform vec2 leapFingersPos[40];
+	//uniform vec2 leapFingersVel[40];
+	
+	for(int i = 0; i < maxFingers; i++){
+		float x = (leapFingersPos[i].x - (scaleX*pos.x)) * (leapFingersPos[i].x - (scaleX*pos.x));
+		float y = (leapFingersPos[i].y - (scaleY*pos.y)) * (leapFingersPos[i].y - (scaleY*pos.y));
+		if( x+y < fingerRadius){
+			acc += leapFingersVel[i] * velSpeed;
+			decay = accTimer;
+		}
+	}
+	
+	/*
 	if(checkUserInput >= 1){
-		float x = (finger1.x - (scaleX*pos.x)) * (finger1.x - (scaleX*pos.x));
-		float y = (finger1.y - (scaleY*pos.y)) * (finger1.y - (scaleY*pos.y));
-		if( x+y < 50.0){
-			vel.x = -vel.x;
+		float x1 = (finger1.x - (scaleX*pos.x)) * (finger1.x - (scaleX*pos.x));
+		float y1 = (finger1.y - (scaleY*pos.y)) * (finger1.y - (scaleY*pos.y));
+		if( x1+y1 < fingerRadius){
+			//pos += vec3(fingerVel1,0.0) * velSpeed;
+			vel += vec3(fingerVel1,0.0) * velSpeed;
+			decay = 1.0;
 		}
 	}
 	if(checkUserInput >= 2){
-		float x = (finger2.x - (scaleX*pos.x)) * (finger2.x - (scaleX*pos.x));
-		float y = (finger2.y - (scaleY*pos.y)) * (finger2.y - (scaleY*pos.y));
-		if( x+y < 50.0){
-			vel.x = -vel.x;
+		float x2 = (finger2.x - (scaleX*pos.x)) * (finger2.x - (scaleX*pos.x));
+		float y2 = (finger2.y - (scaleY*pos.y)) * (finger2.y - (scaleY*pos.y));
+		if( x2+y2 < fingerRadius){
+			//pos += vec3(fingerVel2,0.0) * velSpeed;
+			vel += vec3(fingerVel2,0.0) * velSpeed;
+			decay = 1.0;
 		}
 	}
 	if(checkUserInput >= 3){
-		float x = (finger3.x - (scaleX*pos.x)) * (finger3.x - (scaleX*pos.x));
-		float y = (finger3.y - (scaleY*pos.y)) * (finger3.y - (scaleY*pos.y));
-		if( x+y < 50.0){
-			vel.x = -vel.x;
+		float x3 = (finger3.x - (scaleX*pos.x)) * (finger3.x - (scaleX*pos.x));
+		float y3 = (finger3.y - (scaleY*pos.y)) * (finger3.y - (scaleY*pos.y));
+		if( x3+y3 < fingerRadius){
+			//pos += vec3(fingerVel3,0.0) * velSpeed;
+			vel += vec3(fingerVel3,0.0) * velSpeed;
+			decay = 1.0;
 		}
 	}
 	if(checkUserInput >= 4){
-		float x = (finger4.x - (scaleX*pos.x)) * (finger4.x - (scaleX*pos.x));
-		float y = (finger4.y - (scaleY*pos.y)) * (finger4.y - (scaleY*pos.y));
-		if( x+y < 50.0){
-			vel.x = -vel.x;
+		float x4 = (finger4.x - (scaleX*pos.x)) * (finger4.x - (scaleX*pos.x));
+		float y4 = (finger4.y - (scaleY*pos.y)) * (finger4.y - (scaleY*pos.y));
+		if( x4+y4 < fingerRadius){
+			//pos += vec3(fingerVel4,0.0) * velSpeed;
+			vel += vec3(fingerVel4,0.0) * velSpeed;
+			decay = 1.0;
 		}
 	}
 	if(checkUserInput >= 5){
-		float x = (finger5.x - (scaleX*pos.x)) * (finger5.x - (scaleX*pos.x));
-		float y = (finger5.y - (scaleY*pos.y)) * (finger5.y - (scaleY*pos.y));
-		if( x+y < 50.0){
-			vel.x = -vel.x;
+		float x5 = (finger5.x - (scaleX*pos.x)) * (finger5.x - (scaleX*pos.x));
+		float y5 = (finger5.y - (scaleY*pos.y)) * (finger5.y - (scaleY*pos.y));
+		if( x5+y5 < fingerRadius){
+			//pos += vec3(fingerVel5,0.0) * velSpeed;
+			vel += vec3(fingerVel5,0.0) * velSpeed;
+			decay = 1.0;
 		}
 	}
-    
+    */
+	
 	//Add noise to the particles
 	//pos.x += (vel.x);
 	//pos.y += (vel.y);
-	
-	
-	
     
-		//position + mass
+	//position + mass
 	gl_FragData[0] = vec4(pos, mass);
     
 	//velocity + decay
 	gl_FragData[1] = vec4(vel, decay);
     
 	//age information
-	gl_FragData[2] = vec4(age, maxAge, 0.0, 1.0);
+	gl_FragData[2] = vec4(age, maxAge, acc);
 }

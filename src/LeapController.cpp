@@ -35,6 +35,7 @@ LeapController::LeapController(){
 	numActiveFingers = 0;
 	for(int i = 0; i < 40; i++){
 		fingerPositions.push_back(Vec2f(0.0f, 0.0f));
+		fingerVelocities.push_back(Vec2f(0.0f, 0.0f));
 	}
 }
 
@@ -84,7 +85,10 @@ void LeapController::onFrame(const Controller& controller) {
 			
 			for (int i = 0; i < fingers.count(); ++i) {
 				ci::Vec2f currentFingerPos(fingers[i].tipPosition().x, fingers[i].tipPosition().y);
-				fingerPositions[i] = (currentFingerPos);
+				fingerPositions[i] = currentFingerPos;
+
+				ci::Vec2f currentFingerVel(fingers[i].tipVelocity().x, (fingers[i].tipVelocity().y*-1.0));
+				fingerVelocities[i] = currentFingerVel;
 			}
 			avgPos = fingers[0].tipPosition(); 
 			numActiveFingers = fingers.count();

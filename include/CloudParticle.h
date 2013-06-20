@@ -69,6 +69,8 @@ public:
 	float minIndices[16];
 	float maxIndices[16];
 	
+
+	
 	Vec2i currentWindowSize;
 	Perlin mPerlin;
 	Vec3f mVertPos;
@@ -81,6 +83,7 @@ public:
 	
 	gl::Texture mPosTex;
 	gl::Texture mVelTex;
+	gl::Texture mVelTex2;
 	gl::Texture mInfoTex;
 	gl::Texture mNoiseTex;
 	gl::Texture mSpriteTex;
@@ -106,21 +109,38 @@ public:
 	
 	Controller		mController;
 	LeapController*	mLeapController;
+	ci::Vec2f			finger1;
+	ci::Vec2f			finger2;
+	ci::Vec2f			finger3;
+	ci::Vec2f			finger4;
+	ci::Vec2f			finger5;
+	bool				hasFingers;
+
+	Vec2f leapFingersPos[40];
+	Vec2f leapFingersVel[40];
+	int maxFingers;
 	
 	vector<CloudController*>* mCloudControllers;
 	
 	TriMesh			mMesh;
 
+	
+	bool			firstTime;
 	//GUI, and associated fields
+	//params::InterfaceGlRef	mParams;
 	params::InterfaceGl	mParams;
 	float				cloudCover;
 	float				cloudSharpness;
-	bool				mCentralGravity;
-	int					mCountrySelect;
-	int					mPrevCountrySelect;
-	bool				mPause;
+	float				pointSize;
+	float				cloudSize;
+	float				testAlpha;
+	float				velSpeed;
+	float				accTimer;
+	float				fingerRadius;
+	int					noiseLevel;
+	int					noiseMultiplier;
+	int					posDivide;
+	
 
-	Quatf				mSceneRotation;
-	float				mCameraDistance;
 };
 

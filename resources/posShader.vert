@@ -7,6 +7,8 @@ varying float age;
 
 varying vec4 texCoord;
 
+uniform float pointSize;
+
 float rand(vec2 co){
 	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
@@ -30,7 +32,7 @@ void main()
 	newVertexPos = vec4((scaleX * dv.x), (scaleY * dv.y), (scaleX * sin(dv.z)*5.0), 1.0);
 	
 	//adjust point size, increasing size kills performance
-	gl_PointSize = 12.0 - (1.0 * age);
+	gl_PointSize = pointSize - (1.0 * age);
     
 	gl_Position = gl_ModelViewProjectionMatrix * newVertexPos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;

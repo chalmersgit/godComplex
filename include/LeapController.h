@@ -21,5 +21,7 @@ class LeapController : public Listener {
 	Vector avgPos;
 	int numActiveFingers;
 	std::vector<ci::Vec2f> fingerPositions;
+	std::vector<ci::Vec2f> fingerVelocities;
+
 };
 

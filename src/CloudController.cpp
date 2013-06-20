@@ -47,29 +47,13 @@ void CloudController::setColor(Vec3f col)
 }
 
 void CloudController::update(){
-	//console() << "1 " << mLoc << ", " << mVel << ", " << mAcc << endl;
 	mVel += mAcc;
-	
-	//console() << "2 " << mLoc << ", " << mVel << ", " << mAcc << endl;
-	
 	mVel.limit(mMaxSpeed);
-	
-	//console() << "3 " << mLoc << ", " << mVel << ", " << mAcc << endl;
-	
 	prevmLoc = mLoc;
-	
-	mLoc += mVel;
+	//mLoc += mVel;
 	
 	//?
 	mAcc *= mMaxForce;
-	
-	//console() << "4 " << mLoc << ", " << mVel << ", " << mAcc << endl << endl;
-	
-	/*if(mCloudParticle !=NULL){
-	 mCloudParticle->setPos(mLoc);
-	 mCloudParticle->update();
-	 }*/
-	
 }
 
 void CloudController::draw(){

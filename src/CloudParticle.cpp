@@ -1,16 +1,15 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/Rand.h"
-#include "CloudParticle.h"
 #include "cinder/gl/gl.h"
 #include <boost/lexical_cast.hpp>
-
+#include "cinder/params/Params.h"
 
 
 #include "Resources.h"
-
+#include "CloudParticle.h"
 //#include "LeapController.h"
 
-#include "cinder/params/Params.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -18,6 +17,7 @@ using namespace std;
 
 CloudParticle::CloudParticle()
 {
+	firstTime = true;
 	setup();
 
 }
@@ -71,6 +71,14 @@ void CloudParticle::initFBO()
 	mVelTex.enableAndBind();
 	gl::draw(mVelTex,mFbo[0].getBounds());
 	mVelTex.unbind();
+
+	//velocity buffer 2
+	glDrawBuffer(GL_COLOR_ATTACHMENT1_EXT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	mVelTex2.enableAndBind();
+	gl::draw(mVelTex2,mFbo[0].getBounds());
+	mVelTex2.unbind();
 	
 	//particle information buffer
 	glDrawBuffer(GL_COLOR_ATTACHMENT2_EXT);
@@ -85,6 +93,7 @@ void CloudParticle::initFBO()
 	
 	mPosTex.disable();
 	mVelTex.disable();
+	mVelTex2.disable();
 	mInfoTex.disable();
 }
 
@@ -145,7 +154,7 @@ void CloudParticle::setup()
 			//velocity
 			//Vec2f vel = Vec2f(Rand::randFloat(-.005f,.005f),Rand::randFloat(-.005f,.005f));
 			//console() << vel << endl;
-			Vec2f vel = Vec2f(0.01, 0);
+			Vec2f vel = Vec2f(0, 0);
 			//vel.normalize();
 			
 			float nX = iterator.x() * 0.005f;
@@ -154,30 +163,33 @@ void CloudParticle::setup()
 			Vec3f v( nX, nY, nZ );
 			float noise = mPerlin.fBm( v );
 			
-			float angle = noise * 15.0f ;
+			float angle = noise;// * 15.0f ;
 			
 			//noise
 			float xNoise = 0.00005f;
-			float yNoise = 0.0002f;
-			Color noiseColour(cos( angle ) * Rand::randFloat(xNoise, yNoise), sin( angle ) * Rand::randFloat(xNoise, yNoise), 0.0f);
-			if(noiseColour.r  < 0.0f){
-				noiseColour.r *= -1;
-			}
+			float yNoise = 0.00008f;//002f;
+			float zNoise = 1.0f;
+			ColorA noiseColour(cos( angle ) * zNoise, sin( angle ) * zNoise, 0.0f, 0.0f);
+			
+			//if(noiseColour.r  < 0.0f){
+			//	noiseColour.r *= -1;
+			//}
 			mNoiseSurface.setPixel(iterator.getPos(), noiseColour);
 			
 			//position + mass
 			ColorA positionColourMASS(mVertPos.x,mVertPos.y,mVertPos.z, Rand::randFloat(.00005f,.0002f));
-			
-			//ColorA positionColourMASS(mVertPos.x,mVertPos.y,mVertPos.z, 0);
 			mPosSurface.setPixel(iterator.getPos(), positionColourMASS);
-			
+
 			//forces + decay
-			Color forcesColourDECAY(vel.x,vel.y, Rand::randFloat(.01f,1.00f));
+			ColorA forcesColourDECAY(vel.x,vel.y, Rand::randFloat(.01f,1.00f), 0.0);
 			mVelSurface.setPixel(iterator.getPos(), forcesColourDECAY);
 			
-			//particle age
-			ColorA ageColour(Rand::randFloat(.007f,1.0f), 1.0f, 0.00f,1.00f);
+			//particle age and acceleration
+			ColorA ageColour(Rand::randFloat(.007f,1.0f), 1.0f, 0.00f, 0.00f);
 			mInfoSurface.setPixel(iterator.getPos(), ageColour);
+
+			//Color origPosTemp(0.0, 0.0, 0.0);
+			
 		}
 	}
 	
@@ -205,12 +217,18 @@ void CloudParticle::setup()
 	mVelTex.setWrap( GL_REPEAT, GL_REPEAT );
 	mVelTex.setMinFilter( GL_NEAREST );
 	mVelTex.setMagFilter( GL_NEAREST );
+
+	mVelTex2 = gl::Texture(mVelSurface, tFormat);
+	mVelTex2.setWrap( GL_REPEAT, GL_REPEAT );
+	mVelTex2.setMinFilter( GL_NEAREST );
+	mVelTex2.setMagFilter( GL_NEAREST );
 	
 	mInfoTex = gl::Texture(mInfoSurface, tFormatSmall);
 	mInfoTex.setWrap( GL_REPEAT, GL_REPEAT );
 	mInfoTex.setMinFilter( GL_NEAREST );
 	mInfoTex.setMagFilter( GL_NEAREST );
 	
+
 	//initialize fbo
 	gl::Fbo::Format format;
 	format.enableDepthBuffer(false);
@@ -266,24 +284,77 @@ void CloudParticle::setup()
 	mMouseDownInt = 0;
 	mLoc = Vec2f(0.0, 0.0);
 
-	// SETUP PARAMS
+	// LEAP FINGERS
 
-	mParams = params::InterfaceGl( "Cloud Control", Vec2i( 220, 200 ) );
-	mParams.addParam( "cloudCover", &cloudCover, "min=0 max=1 step=0.01 keyIncr=w keyDecr=q" );
-	mParams.addParam( "cloudSharpness", &cloudSharpness, "min=0 max=1 step=0.01 keyIncr=s keyDecr=a"  );
+	finger1 = Vec2f(0.0,0.0);
+	finger2 = Vec2f(0.0,0.0);
+	finger3 = Vec2f(0.0,0.0);
+	finger4 = Vec2f(0.0,0.0);
+	finger5 = Vec2f(0.0,0.0);
+	hasFingers = false;
+
+
+	// SETUP PARAMS
 	
+	//Oliver
+	/*
+	mParams = params::InterfaceGl::create( getWindow(), "App parameters", toPixels( Vec2i( 200, 400 ) ) );
+	mParams->addParam( "cloudCover", &cloudCover, "min=0 max=1 step=0.0001 keyIncr=w keyDecr=q" );
+	mParams->addParam( "cloudSharpness", &cloudSharpness, "min=0 max=1 step=0.0001 keyIncr=s keyDecr=a"  );
+	mParams->addParam("pointSize", &pointSize, "min=0 max=30 step=0.5 keyIncr=x keyDecr=z");
+	mParams->addParam("cloudSize", &cloudSize, "min=0 max=0.5 step=0.01 keyIncr=r keyDecr=e");
+	mParams->addParam("testAlpha", &testAlpha, "min=0 max=1.0 step=0.0001 keyIncr=v keyDecr=c");
+	mParams->addParam("noiseLevel", &noiseLevel, "min=0 max=20 step=1 keyIncr=y keyDecr=t");
+	mParams->addParam("noiseMultiplier", &noiseMultiplier, "min=0 max=3000 step=1 keyIncr=h keyDecr=g");
+	mParams->addParam("posDivide", &posDivide, "min=1 max=100 step=1 keyIncr=i keyDecr=u" );
+	mParams->addParam("velSpeed", &velSpeed, "min=0.0 max=100.0 step=0.000001 keyIncr=l keyDecr=k" );
+	mParams->addParam("accTimer", &accTimer, "min=0.0 max=100.0 step=0.001 keyIncr=l keyDecr=k" );
+	mParams->addParam("fingerRadius", &fingerRadius, "min=10.0 max=1000.0 step=1.0 keyIncr=b keyDecr=v" );
+	mParams->setOptions( "", "position='70 70'");	
+	*/
+
+	//Andrew
+	mParams = params::InterfaceGl( "Cloud Control", Vec2i( 220, 200 ) );
+	mParams.addParam( "cloudCover", &cloudCover, "min=0 max=1 step=0.0001 keyIncr=w keyDecr=q" );
+	mParams.addParam( "cloudSharpness", &cloudSharpness, "min=0 max=1 step=0.0001 keyIncr=s keyDecr=a"  );
+	mParams.addParam("pointSize", &pointSize, "min=0 max=30 step=0.5 keyIncr=x keyDecr=z");
+	mParams.addParam("cloudSize", &cloudSize, "min=0 max=0.5 step=0.01 keyIncr=r keyDecr=e");
+	mParams.addParam("testAlpha", &testAlpha, "min=0 max=1.0 step=0.0001 keyIncr=v keyDecr=c");
+	mParams.addParam("noiseLevel", &noiseLevel, "min=0 max=20 step=1 keyIncr=y keyDecr=t");
+	mParams.addParam("noiseMultiplier", &noiseMultiplier, "min=0 max=3000 step=1 keyIncr=h keyDecr=g");
+	mParams.addParam("posDivide", &posDivide, "min=1 max=100 step=1 keyIncr=i keyDecr=u" );
+	mParams.addParam("velSpeed", &velSpeed, "min=0.0 max=100.0 step=0.000001 keyIncr=l keyDecr=k" );
+	mParams.addParam("accTimer", &accTimer, "min=0.0 max=100.0 step=0.001 keyIncr=l keyDecr=k" );
+	mParams.addParam("fingerRadius", &fingerRadius, "min=10.0 max=1000.0 step=1.0 keyIncr=b keyDecr=v" );
+	mParams.setOptions( "", "position='70 70'");	
+
+	/*
+	//Basic setup
 	cloudCover = 0.5;
 	cloudSharpness = 0.5;
+	pointSize = 12.0;
+	cloudSize = 0.08;
+	testAlpha = 0.5;
+	noiseLevel = 0;
+	noiseMultiplier = 1;
+	posDivide = 1;
+	velSpeed = 1.0;
+	*/
 
-	//mParams.addParam( "Log Scaling", &mLogScaling, "keyIncr=s" );
-	//mParams.addParam( "Center Gravity", &mCentralGravity, "keyIncr=g" );
-	//mParams.addParam( "Pause", &mPause, "keyIncr=p" );
-	//mParams.addParam( "Migration Display", &migrationDisplay, "keyIncr=m" );
-	//mParams.addParam( "Highlight", &highLight, "keyIncr=h" );
-	//mParams.addButton( "Play", std::bind( &WorldAtlusVisualiser::playButton, this ) );
+	//Tailored setup
+	cloudCover = 0.5074;
+	cloudSharpness = 0.8842;
+	pointSize = 3;
+	cloudSize = 0.10;
+	testAlpha = 0.01;
+	noiseLevel = 7;
+	noiseMultiplier = 300;
+	posDivide = 1;
+	velSpeed = 0.000005;
+	accTimer = 0.5;
+	fingerRadius = 500.0;
+
 	
-	//mParams.setOptions( "", "position='70 200'");
-	mParams.setOptions( "", "position='70 70'");	
 }
 
 void CloudParticle::setPos(Vec2f loc)
@@ -328,15 +399,32 @@ void CloudParticle::update()
 	mVelTex.bind(3);
 	mPosTex.bind(4);
 	mNoiseTex.bind(5);
+	mVelTex2.bind(6);
+	
 	
 	mVelShader.bind();
+
+	if(firstTime){
+		mVelShader.uniform("firstTime", true);
+		firstTime = false;
+	}
+	else{
+		mVelShader.uniform("firstTime", false);
+	}
+	
 	mVelShader.uniform("positions", mPos);
 	mVelShader.uniform("velocities", mVel);
 	mVelShader.uniform("information", mInfo);
 	mVelShader.uniform("oVelocities",3);
 	mVelShader.uniform("oPositions",4);
 	mVelShader.uniform("noiseTex", mNoise);
-	
+	mVelShader.uniform("oPositions2", 6);
+
+	//params gui
+	mVelShader.uniform("cloudSize", cloudSize);
+	mVelShader.uniform("velSpeed", velSpeed);
+	mVelShader.uniform("accTimer", accTimer);
+	mVelShader.uniform("fingerRadius", fingerRadius);
 	
 	//Update vel shader
 	mVelShader.uniform("maxControllers", activeControllersCount);
@@ -353,6 +441,8 @@ void CloudParticle::update()
 	
 	
 //	/*
+	
+	
 	if(mLeapController->hasFingers){
 		for(int i = 0; i < mLeapController->fingerPositions.size(); i++){
 			float leap_x = mLeapController->fingerPositions[i].x;
@@ -362,22 +452,31 @@ void CloudParticle::update()
 				float newX = ( leap_x - minX ) / ( maxX - minX ) * currentWindowSize.x;
 				float newY = ( leap_y - minY ) / ( maxY - minY ) * currentWindowSize.y;
 				newY = currentWindowSize.y - newY;
-				console() << newX << ", " << newY << endl;
+				console() << newX << ", " << newY << " : "<< mLeapController->numActiveFingers<< endl;
+
+				leapFingersPos[i] = Vec2f(newX, newY);
+				leapFingersVel[i] = mLeapController->fingerVelocities[i];
+
 				switch (i){
 				case 0:
 					mVelShader.uniform("finger1", Vec2f(newX, newY)); //leap_x, leap_y));
+					mVelShader.uniform("fingerVel1", mLeapController->fingerVelocities[i]);	
 					break;
 				case 1:
-					mVelShader.uniform("finger2", Vec2f(newX, newY));
-					break;
+					mVelShader.uniform("finger2", Vec2f(newX, newY)); //leap_x, leap_y));
+					mVelShader.uniform("fingerVel2", mLeapController->fingerVelocities[i]);	
+					break; 
 				case 2:
-					mVelShader.uniform("finger3", Vec2f(newX, newY));
+					mVelShader.uniform("finger3", Vec2f(newX, newY)); //leap_x, leap_y));
+					mVelShader.uniform("fingerVel3", mLeapController->fingerVelocities[i]);	
 					break;
 				case 3:
-					mVelShader.uniform("finger4", Vec2f(newX, newY));
+					mVelShader.uniform("finger4", Vec2f(newX, newY)); //leap_x, leap_y));
+					mVelShader.uniform("fingerVel4", mLeapController->fingerVelocities[i]);	
 					break;
 				case 4:
-					mVelShader.uniform("finger5", Vec2f(newX, newY));
+					mVelShader.uniform("finger5", Vec2f(newX, newY)); //leap_x, leap_y));
+					mVelShader.uniform("fingerVel5", mLeapController->fingerVelocities[i]);	
 					break;
 				default:
 					break;
@@ -395,7 +494,11 @@ void CloudParticle::update()
 		mVelShader.uniform("checkUserInput", mMouseDownInt);
 	}
 //    */
-	
+	mVelShader.uniform("leapFingersPos", leapFingersPos, 80);
+	mVelShader.uniform("leapFingersVel", leapFingersVel, 80);
+	mVelShader.uniform("maxFingers", mLeapController->numActiveFingers);
+
+
 	mVelShader.uniform("scaleX",(float)PARTICLES_X);
 	mVelShader.uniform("scaleY",(float)PARTICLES_Y);
 	
@@ -415,6 +518,7 @@ void CloudParticle::update()
 	mVelTex.unbind();
 	mPosTex.unbind();
 	mNoiseTex.unbind();
+	mVelTex2.unbind();
 	
 	mFbo[mBufferIn].unbindFramebuffer();
 	
@@ -452,9 +556,15 @@ void CloudParticle::draw(){
 	mPosShader.uniform("scaleX",(float)PARTICLES_X);
 	mPosShader.uniform("scaleY",(float)PARTICLES_Y);
 
+	//params gui
 	mPosShader.uniform("cloudCover", cloudCover);
 	mPosShader.uniform("cloudSharpness", cloudSharpness);
-
+	mPosShader.uniform("pointSize", pointSize);
+	mPosShader.uniform("testAlpha", testAlpha);
+	mPosShader.uniform("noiseLevel", noiseLevel);
+	mPosShader.uniform("noiseMultiplier", noiseMultiplier);
+	mPosShader.uniform("posDivide", posDivide);
+	
 	//update pos shader
 	mPosShader.uniform("maxControllers", activeControllersCount);
 	mPosShader.uniform("controllers", controllers, 16);
@@ -479,8 +589,10 @@ void CloudParticle::draw(){
 	mFbo[mBufferIn].unbindTexture();
 	
 	gl::disableAlphaBlending();
+	
 
-	params::InterfaceGl::draw();
+	//mParams->draw();
+	mParams.draw();
 }
 
 void CloudParticle::mouseDown( MouseEvent event ){
