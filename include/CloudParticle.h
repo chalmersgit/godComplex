@@ -34,9 +34,8 @@ using namespace std;
 #define HEIGHT 1080 // Leap
 
 
-#define PARTICLES_X 1040 //This should be sqrt(WIDTH * HEIGHT)
-#define PARTICLES_Y 1040
-
+#define PARTICLES_X 50 //This should be sqrt(WIDTH * HEIGHT)
+#define PARTICLES_Y 50
 
 class CloudParticle {
 public:
@@ -68,6 +67,9 @@ public:
 	Vec2f controllers[16];
 	float minIndices[16];
 	float maxIndices[16];
+
+	float cloudWidth;
+	float cloudHeight;
 	
 
 	
@@ -119,6 +121,7 @@ public:
 	Vec2f leapFingersPos[40];
 	Vec2f leapFingersVel[40];
 	int maxFingers;
+	float fingerTrackerTimer;
 	
 	vector<CloudController*>* mCloudControllers;
 	
@@ -137,9 +140,13 @@ public:
 	float				velSpeed;
 	float				accTimer;
 	float				fingerRadius;
+	float				cloudColor;
 	int					noiseLevel;
 	int					noiseMultiplier;
 	int					posDivide;
+
+	//tracker img
+	gl::Texture			trackImg;
 	
 
 };

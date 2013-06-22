@@ -59,6 +59,9 @@ uniform float accTimer;
 
 uniform bool firstTime;
 
+uniform float cloudWidth;
+uniform float cloudHeight;
+
 /*
 To make clouds, we need to not use velocity applied to particles.
 The noise created by velocity makes it look like fur or hair.
@@ -153,12 +156,11 @@ void main(){
 			float amt = max(offset-abs(origPos.x - offset),origPos.y);
 			amt *= (cloudSize);
 			
-			pos.x = cos(theta)*(-amt)*2.0 + controllers[i].x;
-			pos.y = -sin(theta)*(-amt)*2.0 + controllers[i].y;
+			pos.x = cos(theta)*(-amt)*cloudWidth + controllers[i].x;
+			pos.y = -sin(theta)*(-amt)*cloudHeight + controllers[i].y;
 			break;
 		}
 	}
-	
 	
 	pos.x += vel.x;
 	pos.y += vel.y;
@@ -188,58 +190,12 @@ void main(){
 		float x = (leapFingersPos[i].x - (scaleX*pos.x)) * (leapFingersPos[i].x - (scaleX*pos.x));
 		float y = (leapFingersPos[i].y - (scaleY*pos.y)) * (leapFingersPos[i].y - (scaleY*pos.y));
 		if( x+y < fingerRadius){
-			acc += leapFingersVel[i] * velSpeed;
+			float gradForce = 1 - ((x+y)/fingerRadius);
+			acc += (leapFingersVel[i] * velSpeed) * gradForce;
 			decay = accTimer;
 		}
 	}
 	
-	/*
-	if(checkUserInput >= 1){
-		float x1 = (finger1.x - (scaleX*pos.x)) * (finger1.x - (scaleX*pos.x));
-		float y1 = (finger1.y - (scaleY*pos.y)) * (finger1.y - (scaleY*pos.y));
-		if( x1+y1 < fingerRadius){
-			//pos += vec3(fingerVel1,0.0) * velSpeed;
-			vel += vec3(fingerVel1,0.0) * velSpeed;
-			decay = 1.0;
-		}
-	}
-	if(checkUserInput >= 2){
-		float x2 = (finger2.x - (scaleX*pos.x)) * (finger2.x - (scaleX*pos.x));
-		float y2 = (finger2.y - (scaleY*pos.y)) * (finger2.y - (scaleY*pos.y));
-		if( x2+y2 < fingerRadius){
-			//pos += vec3(fingerVel2,0.0) * velSpeed;
-			vel += vec3(fingerVel2,0.0) * velSpeed;
-			decay = 1.0;
-		}
-	}
-	if(checkUserInput >= 3){
-		float x3 = (finger3.x - (scaleX*pos.x)) * (finger3.x - (scaleX*pos.x));
-		float y3 = (finger3.y - (scaleY*pos.y)) * (finger3.y - (scaleY*pos.y));
-		if( x3+y3 < fingerRadius){
-			//pos += vec3(fingerVel3,0.0) * velSpeed;
-			vel += vec3(fingerVel3,0.0) * velSpeed;
-			decay = 1.0;
-		}
-	}
-	if(checkUserInput >= 4){
-		float x4 = (finger4.x - (scaleX*pos.x)) * (finger4.x - (scaleX*pos.x));
-		float y4 = (finger4.y - (scaleY*pos.y)) * (finger4.y - (scaleY*pos.y));
-		if( x4+y4 < fingerRadius){
-			//pos += vec3(fingerVel4,0.0) * velSpeed;
-			vel += vec3(fingerVel4,0.0) * velSpeed;
-			decay = 1.0;
-		}
-	}
-	if(checkUserInput >= 5){
-		float x5 = (finger5.x - (scaleX*pos.x)) * (finger5.x - (scaleX*pos.x));
-		float y5 = (finger5.y - (scaleY*pos.y)) * (finger5.y - (scaleY*pos.y));
-		if( x5+y5 < fingerRadius){
-			//pos += vec3(fingerVel5,0.0) * velSpeed;
-			vel += vec3(fingerVel5,0.0) * velSpeed;
-			decay = 1.0;
-		}
-	}
-    */
 	
 	//Add noise to the particles
 	//pos.x += (vel.x);

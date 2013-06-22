@@ -1,6 +1,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/Rand.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Timeline.h"
 #include <boost/lexical_cast.hpp>
 #include "cinder/params/Params.h"
 
@@ -99,6 +100,7 @@ void CloudParticle::initFBO()
 
 void CloudParticle::setup()
 {
+	fingerTrackerTimer = 0.0f;
 	activeControllersCount = 5;
 	gl::clear();
 	
@@ -110,10 +112,16 @@ void CloudParticle::setup()
 		console() << "3" << endl;
 		
 		//Leap
+		//X
 		minX = -200;
 		maxX = 200;
+		//Y
 		minY = 100;
 		maxY = 400;
+
+		//Z - for table top
+		//minY = -200;
+		//maxY = 200;
 		console() << "4" << endl;
 		
 		mLeapController = new LeapController();
@@ -313,6 +321,8 @@ void CloudParticle::setup()
 	mParams->setOptions( "", "position='70 70'");	
 	*/
 
+
+
 	//Andrew
 	mParams = params::InterfaceGl( "Cloud Control", Vec2i( 220, 200 ) );
 	mParams.addParam( "cloudCover", &cloudCover, "min=0 max=1 step=0.0001 keyIncr=w keyDecr=q" );
@@ -326,7 +336,10 @@ void CloudParticle::setup()
 	mParams.addParam("velSpeed", &velSpeed, "min=0.0 max=100.0 step=0.000001 keyIncr=l keyDecr=k" );
 	mParams.addParam("accTimer", &accTimer, "min=0.0 max=100.0 step=0.001 keyIncr=l keyDecr=k" );
 	mParams.addParam("fingerRadius", &fingerRadius, "min=10.0 max=1000.0 step=1.0 keyIncr=b keyDecr=v" );
-	mParams.setOptions( "", "position='70 70'");	
+	mParams.addParam("cloudWidth", &cloudWidth,"min=0.5 max=10.0 step=0.5 keyIncr=8 keyDecr=7" );
+	mParams.addParam("cloudHeight", &cloudHeight,"min=0.5 max=10.0 step=0.5 keyIncr=5 keyDecr=4" );
+	mParams.addParam("cloudColor", &cloudColor, "min=0.0 max=1.0 step=0.01 keyIncr=2 keyDecr=1" );
+	mParams.setOptions( "", "position='70 70'");
 
 	/*
 	//Basic setup
@@ -358,6 +371,7 @@ void CloudParticle::setup()
 	*/
 
 	//2
+	/*
 	cloudCover = 0.5074;
 	cloudSharpness = 0.9063;
 	pointSize = 6;
@@ -368,7 +382,29 @@ void CloudParticle::setup()
 	posDivide = 1;
 	velSpeed = 0.000005;
 	accTimer = 0.5;
-	fingerRadius = 500.0;	
+	fingerRadius = 500.0;
+	cloudWidth = 2.0;
+	cloudHeight = 2.0;
+	cloudColor = 1.0;
+	*/
+	//3
+	cloudCover = 0.5636;
+	cloudSharpness = 0.9690;
+	pointSize = 3.0;
+	cloudSize = 0.01;
+	testAlpha = 0.0;
+	noiseLevel = 1;
+	noiseMultiplier = 3;
+	posDivide = 1;
+	velSpeed = 0.000010;
+	accTimer = 0.5;
+	fingerRadius = 783.0;
+	cloudWidth = 4.0;
+	cloudHeight = 2.0;
+	cloudColor = 1.0;
+
+	//load tracker
+	trackImg = gl::Texture(loadImage(loadResource( TRACK_IMG )));
 }
 
 void CloudParticle::setPos(Vec2f loc)
@@ -439,6 +475,8 @@ void CloudParticle::update()
 	mVelShader.uniform("velSpeed", velSpeed);
 	mVelShader.uniform("accTimer", accTimer);
 	mVelShader.uniform("fingerRadius", fingerRadius);
+	mVelShader.uniform("cloudWidth", cloudWidth);
+	mVelShader.uniform("cloudHeight", cloudHeight);
 	
 	//Update vel shader
 	mVelShader.uniform("maxControllers", activeControllersCount);
@@ -455,6 +493,7 @@ void CloudParticle::update()
 	
 	//Leap
 	if(mLeapController->hasFingers){
+		maxFingers = 0;
 		for(int i = 0; i < mLeapController->fingerPositions.size(); i++){
 			float leap_x = mLeapController->fingerPositions[i].x;
 			float leap_y = mLeapController->fingerPositions[i].y;
@@ -463,49 +502,23 @@ void CloudParticle::update()
 				float newX = ( leap_x - minX ) / ( maxX - minX ) * currentWindowSize.x;
 				float newY = ( leap_y - minY ) / ( maxY - minY ) * currentWindowSize.y;
 				newY = currentWindowSize.y - newY;
-				console() << newX << ", " << newY << " : "<< mLeapController->numActiveFingers<< endl;
-
 				leapFingersPos[i] = Vec2f(newX, newY);
 				leapFingersVel[i] = mLeapController->fingerVelocities[i];
-
-				switch (i){
-				case 0:
-					mVelShader.uniform("finger1", Vec2f(newX, newY)); //leap_x, leap_y));
-					mVelShader.uniform("fingerVel1", mLeapController->fingerVelocities[i]);	
-					break;
-				case 1:
-					mVelShader.uniform("finger2", Vec2f(newX, newY)); //leap_x, leap_y));
-					mVelShader.uniform("fingerVel2", mLeapController->fingerVelocities[i]);	
-					break; 
-				case 2:
-					mVelShader.uniform("finger3", Vec2f(newX, newY)); //leap_x, leap_y));
-					mVelShader.uniform("fingerVel3", mLeapController->fingerVelocities[i]);	
-					break;
-				case 3:
-					mVelShader.uniform("finger4", Vec2f(newX, newY)); //leap_x, leap_y));
-					mVelShader.uniform("fingerVel4", mLeapController->fingerVelocities[i]);	
-					break;
-				case 4:
-					mVelShader.uniform("finger5", Vec2f(newX, newY)); //leap_x, leap_y));
-					mVelShader.uniform("fingerVel5", mLeapController->fingerVelocities[i]);	
-					break;
-				default:
-					break;
-				}
-				
-				//mVelShader.uniform("finger1", Vec2f(newX, newY)); //leap_x, leap_y));
-				mVelShader.uniform("checkUserInput",  mLeapController->numActiveFingers);
+				maxFingers = mLeapController->numActiveFingers;
 			}
 		}
 	}
 	else{
+		fingerTrackerTimer = timeline().getCurrentTime();
+		maxFingers = 0;
 		mVelShader.uniform("mousePos", mMousePos);
 		mVelShader.uniform("checkUserInput", mMouseDownInt);
 	}
 	
 	mVelShader.uniform("leapFingersPos", leapFingersPos, 80);
 	mVelShader.uniform("leapFingersVel", leapFingersVel, 80);
-	mVelShader.uniform("maxFingers", mLeapController->numActiveFingers);
+	mVelShader.uniform("maxFingers", maxFingers);
+
 	
 	mVelShader.uniform("scaleX",(float)PARTICLES_X);
 	mVelShader.uniform("scaleY",(float)PARTICLES_Y);
@@ -572,6 +585,7 @@ void CloudParticle::draw(){
 	mPosShader.uniform("noiseLevel", noiseLevel);
 	mPosShader.uniform("noiseMultiplier", noiseMultiplier);
 	mPosShader.uniform("posDivide", posDivide);
+	mPosShader.uniform("cloudColor", cloudColor);
 	
 	//update pos shader
 	mPosShader.uniform("maxControllers", activeControllersCount);
@@ -595,7 +609,26 @@ void CloudParticle::draw(){
 	mSpriteTex.unbind();
 	
 	mFbo[mBufferIn].unbindTexture();
-	
+
+
+	if(timeline().getCurrentTime() < fingerTrackerTimer + 10.0f  ){
+		float trackerScaleVal = ((sin(timeline().getCurrentTime())) + 2.0) / 7.0;
+		trackImg.enableAndBind();
+		for(int i = 0; i < maxFingers; i++){
+			gl::pushMatrices();
+			gl::translate(leapFingersPos[i].x, leapFingersPos[i].y);
+			gl::rotate(timeline().getCurrentTime() * 20);
+			gl::scale(trackerScaleVal, trackerScaleVal, 0.0);
+			gl::translate(-100.0, -100.0);
+			gl::draw(trackImg, trackImg.getBounds());
+			gl::popMatrices();
+		}
+		trackImg.disable();
+	}
+
+
+
+
 	gl::disableAlphaBlending();
 	
 

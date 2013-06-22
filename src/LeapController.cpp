@@ -75,6 +75,27 @@ void LeapController::onFrame(const Controller& controller) {
 	*/
 
 	if (!frame.hands().empty()) {
+		const FingerList fingers = frame.fingers();
+		for(int k = 0; k < fingers.count(); k++){
+			if (!fingers.empty()){
+				// Calculate the hand's average finger tip position
+				for (int i = 0; i < fingers.count(); ++i) {
+					ci::Vec2f currentFingerPos(fingers[i].tipPosition().x, fingers[i].tipPosition().y);
+					fingerPositions[i] = currentFingerPos;
+
+					ci::Vec2f currentFingerVel(fingers[i].tipVelocity().x, (fingers[i].tipVelocity().y*-1.0));
+					fingerVelocities[i] = currentFingerVel;
+				}
+				avgPos = fingers[0].tipPosition(); 
+				numActiveFingers = fingers.count();
+				hasFingers = true;
+			}
+			else{
+				hasFingers = false;
+			}
+		}
+
+		/*
 		// Get the first hand
 		const Hand hand = frame.hands()[0];
 
@@ -99,6 +120,7 @@ void LeapController::onFrame(const Controller& controller) {
 		else{
 			hasFingers = false;
 		}
+		*/
 
 		/*
 		// Get the hand's sphere radius and palm position

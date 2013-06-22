@@ -27,9 +27,13 @@
 #define VEL_VS				CINDER_RESOURCE( ../Resources/, velShader.vert, 140, GLSL )
 #define VEL_FS				CINDER_RESOURCE( ../Resources/, velShader.frag, 141, GLSL )
 
-//#define PLANE_OBJ			CINDER_RESOURCE( ../Resources/, plane_30x30.obj, 142, OBJ )
+#define TRACK_IMG			CINDER_RESOURCE( ../Resources/, tracker.png, 142, PNG )
+
+//#define PLANE_OBJ			CINDER_RESOURCE( ../Resources/, plane_30x30.obj, 143, OBJ )
     
-//#define SPHERES_OBJ			CINDER_RESOURCE( ../Resources/, two_spheres.obj, 143, OBJ )
+//#define SPHERES_OBJ			CINDER_RESOURCE( ../Resources/, two_spheres.obj, 144, OBJ )
+
+
 
 
 

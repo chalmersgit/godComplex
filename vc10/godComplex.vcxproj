@@ -45,6 +45,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EmbedManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,9 +110,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resources.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\src\CloudController.cpp" />
     <ClCompile Include="..\src\CloudParticle.cpp" />
     <ClCompile Include="..\src\DirVector.cpp" />
@@ -130,6 +128,9 @@
     <ClInclude Include="..\include\VectorFlowField.h" />
     <ClInclude Include="..\include\VectorSet.h" />
     <ClInclude Include="..\include\WaterModule.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\Resources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

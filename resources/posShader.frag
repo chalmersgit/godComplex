@@ -29,6 +29,8 @@ uniform int noiseLevel;
 uniform int noiseMultiplier;
 uniform int posDivide;
 
+uniform float cloudColor;
+
 float M_PI = 3.1415926535897932384626433832795;
 
 float cloudExpCurve(float v){
@@ -134,6 +136,6 @@ void main()
 	//NOTE: Ollie testing
     //vec4 c = vec4(1.0);
     //float pointFalloff = 0.5 - smoothstep(0.1, 0.5, distance(gl_TexCoord[0].xy, vec2(0.5, 0.1)));
-    gl_FragColor = vec4(1.0, 1.0, 1.0, alph);
+    gl_FragColor = vec4(cloudColor, cloudColor, cloudColor, alph);
 }
 

@@ -1,0 +1,37 @@
+#include "..\include\Resources.h"
+
+//1	ICON	"..\\resources\\cinder_app_icon.ico"
+
+RES_WELLINGTON_IMG		
+
+RES_PASS_THRU_VERT		
+RES_GPGPU_FRAG			
+RES_REFRACTION_FRAG		
+
+
+RES_TEXTURE				
+
+
+RES_WELLINGTON_OBJ		
+RES_WELLINGTON_IMG_ALPHA		
+
+
+
+POS_VS				
+POS_FS				
+RES_STARTER_IMAGE	
+
+VEL_VS				
+VEL_FS
+
+TRACK_IMG
+
+
+
+//PLANE_OBJ			
+    
+//SPHERES_OBJ	
+
+
+
+
