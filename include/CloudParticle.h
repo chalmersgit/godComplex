@@ -34,13 +34,13 @@ using namespace std;
 #define HEIGHT 1080 // Leap
 
 
-#define PARTICLES_X 50 //This should be sqrt(WIDTH * HEIGHT)
-#define PARTICLES_Y 50
+#define PARTICLES_X 1920 //This should be sqrt(WIDTH * HEIGHT)
+#define PARTICLES_Y 1920
 
 class CloudParticle {
 public:
 	CloudParticle();
-	CloudParticle(vector<CloudController*>*);
+	CloudParticle(vector<CloudController*>*, int nc);
 	void setup();
 	//void resize( ResizeEvent event );
 	void update();
@@ -67,6 +67,7 @@ public:
 	Vec2f controllers[16];
 	float minIndices[16];
 	float maxIndices[16];
+	float controllerAlpha[16];
 
 	float cloudWidth;
 	float cloudHeight;

@@ -1,15 +1,27 @@
-﻿Build started 22/06/2013 5:08:34 p.m..
-     1>Project "C:\Users\Chalmers\Documents\godComplex_05\vc10\godComplex.vcxproj" on node 2 (build target(s)).
+﻿Build started 24/06/2013 4:15:46 a.m..
+     1>Project "C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\godComplex.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\godComplex.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\Oliver\cinder\blocks\Leap\LeapSDK\include /IC:\Cinder\cinder\blocks\Leap\LeapSDK\include /IC:\Cinder\cinder\boost /IC:\Cinder\cinder\include /I..\include /I..\..\..\..\cinder\include /I..\..\..\..\cinder\boost /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D NOMINMAX /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\LeapController.cpp
-         LeapController.cpp
-     1>c:\users\chalmers\documents\godcomplex_05\src\leapcontroller.cpp(86): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\Oliver\cinder\blocks\Leap\LeapSDK\include /IC:\Cinder\cinder\blocks\Leap\LeapSDK\include /IC:\Cinder\cinder\boost /IC:\Cinder\cinder\include /I..\include /I..\..\..\..\cinder\include /I..\..\..\..\cinder\boost /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D NOMINMAX /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\CloudParticle.cpp
+         CloudParticle.cpp
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(38): warning C4101: 'controllerAlpha' : unreferenced local variable
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(37): warning C4101: 'maxIndices' : unreferenced local variable
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(36): warning C4101: 'minIndices' : unreferenced local variable
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(145): warning C4244: 'argument' : conversion from 'float' to 'int32_t', possible loss of data
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(160): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(161): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(171): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(392): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(393): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(395): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(400): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(501): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\chalmers\documents\github\godcomplex\src\cloudparticle.cpp(603): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
        ResourceCompile:
          All outputs are up-to-date.
        Link:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Chalmers\Documents\godComplex_05\vc10\Debug\godComplex.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Oliver\cinder\blocks\Leap\LeapSDK\lib\x86 /LIBPATH:C:\Cinder\cinder\lib\msw /LIBPATH:C:\Cinder\cinder\lib /LIBPATH:..\..\..\..\cinder\lib /LIBPATH:..\..\..\..\cinder\lib\msw /LIBPATH:C:\Cinder\cinder\blocks\Leap\LeapSDK\lib\x86 cinder_d.lib leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:LIBCMT /NODEFAULTLIB:LIBCPMT /MANIFEST:NO /DEBUG /PDB:"C:\Users\Chalmers\Documents\godComplex_05\vc10\Debug\godComplex.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Chalmers\Documents\godComplex_05\vc10\Debug\godComplex.lib" /MACHINE:X86 Debug\Resources.res
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\Debug\godComplex.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Oliver\cinder\blocks\Leap\LeapSDK\lib\x86 /LIBPATH:C:\Cinder\cinder\lib\msw /LIBPATH:C:\Cinder\cinder\lib /LIBPATH:..\..\..\..\cinder\lib /LIBPATH:..\..\..\..\cinder\lib\msw /LIBPATH:C:\Cinder\cinder\blocks\Leap\LeapSDK\lib\x86 cinder_d.lib leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:LIBCMT /NODEFAULTLIB:LIBCPMT /MANIFEST:NO /DEBUG /PDB:"C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\Debug\godComplex.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\Debug\godComplex.lib" /MACHINE:X86 Debug\Resources.res
          Debug\CloudController.obj
          Debug\CloudParticle.obj
          Debug\DirVector.obj
@@ -18,12 +30,12 @@
          Debug\VectorFlowField.obj
          Debug\VectorSet.obj
          Debug\WaterModule.obj
-         godComplex.vcxproj -> C:\Users\Chalmers\Documents\godComplex_05\vc10\Debug\godComplex.exe
+         godComplex.vcxproj -> C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\Debug\godComplex.exe
        FinalizeBuildStatus:
          Deleting file "Debug\godComplex.unsuccessfulbuild".
          Touching "Debug\godComplex.lastbuildstate".
-     1>Done Building Project "C:\Users\Chalmers\Documents\godComplex_05\vc10\godComplex.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Chalmers\Documents\GitHub\godComplex\vc10\godComplex.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.22
+Time Elapsed 00:00:05.40

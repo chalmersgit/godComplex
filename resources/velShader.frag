@@ -40,6 +40,7 @@ uniform vec2 prevControllers[16];
 uniform vec2 controllers[16];
 uniform float controllerMinIndices[16];
 uniform float controllerMaxIndices[16];
+uniform float controllerAlpha[16];
 
 
 uniform vec2 controller1;
@@ -133,6 +134,7 @@ void main(){
 	
 	//Life/death cycle
 	
+	
 	/*
 	age += tStep;
 	if( age >= maxAge ){
@@ -158,6 +160,10 @@ void main(){
 			
 			pos.x = cos(theta)*(-amt)*cloudWidth + controllers[i].x;
 			pos.y = -sin(theta)*(-amt)*cloudHeight + controllers[i].y;
+			
+			if(controllerAlpha[i] == 0){
+				vel = texture2D(oVelocities, texCoord.st).rgb;
+			}
 			break;
 		}
 	}
@@ -179,7 +185,8 @@ void main(){
 		float x = (mousePos.x - (scaleX*pos.x)) * (mousePos.x - (scaleX*pos.x));
 		float y = (mousePos.y - (scaleY*pos.y)) * (mousePos.y - (scaleY*pos.y));
 		if( x+y < fingerRadius){
-			acc.x += 0.01;
+			acc.x += 0.0001;
+			decay = accTimer;
 		}
 	}
 	
@@ -190,8 +197,16 @@ void main(){
 		float x = (leapFingersPos[i].x - (scaleX*pos.x)) * (leapFingersPos[i].x - (scaleX*pos.x));
 		float y = (leapFingersPos[i].y - (scaleY*pos.y)) * (leapFingersPos[i].y - (scaleY*pos.y));
 		if( x+y < fingerRadius){
+			/*
 			float gradForce = 1 - ((x+y)/fingerRadius);
-			acc += (leapFingersVel[i] * velSpeed) * gradForce;
+			vec2 towardFingerCentre = vec2(leapFingersPos[i].x - (scaleX*pos.x),  leapFingersPos[i].y - (scaleY*pos.y));
+			acc += (towardFingerCentre * velSpeed) * gradForce;
+			decay = accTimer;
+			*/
+			
+			
+			float gradForce = 1 - ((x+y)/fingerRadius);
+			acc += (leapFingersVel[i] * velSpeed) * exp(gradForce);
 			decay = accTimer;
 		}
 	}
@@ -210,3 +225,10 @@ void main(){
 	//age information
 	gl_FragData[2] = vec4(age, maxAge, acc);
 }
+
+
+
+
+
+
+

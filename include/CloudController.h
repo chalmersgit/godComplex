@@ -16,7 +16,8 @@ public:
 	void draw();
 	
 	void applyForce(ci::Vec2f);
-	
+
+	void setPrevTime();
 	void doRespawn();
 	void setIndex(float iMin, float iMax);
 	
@@ -27,6 +28,10 @@ public:
 	bool state;
 	float indexMin;
 	float indexMax;
+	float lifeLength;
+	float prevTime;
+	float controllerAlpha;
+
 	
 	ci::Vec2f prevmLoc;
 	ci::Vec2f mLoc;

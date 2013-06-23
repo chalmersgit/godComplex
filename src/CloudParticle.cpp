@@ -23,17 +23,19 @@ CloudParticle::CloudParticle()
 
 }
 
-CloudParticle::CloudParticle(vector<CloudController*>* cc){
+CloudParticle::CloudParticle(vector<CloudController*>* cc, int nc){
 	mCloudControllers = cc;
+	activeControllersCount = nc;
+
 	setup();
 	particleTexRes = Vec2f(PARTICLES_X, PARTICLES_Y);
 	
 	//need a timer to kill things
-	int activeControllersCount;
 	Vec2f prevControllers[16];
 	Vec2f controllers[16];
 	float minIndices[16];
 	float maxIndices[16];
+	float controllerAlpha[16];
 }
 
 void CloudParticle::initFBO()
@@ -101,7 +103,6 @@ void CloudParticle::initFBO()
 void CloudParticle::setup()
 {
 	fingerTrackerTimer = 0.0f;
-	activeControllersCount = 5;
 	gl::clear();
 	
 	try {
@@ -420,23 +421,24 @@ void CloudParticle::updateGPUcloudControllers(){
 		controllers[i] = (*mCloudControllers)[i]->mLoc / particleTexRes;
 		minIndices[i] = (*mCloudControllers)[i]->indexMin;
 		maxIndices[i] = (*mCloudControllers)[i]->indexMax;
-		//console() << "Val " << i << ": " << (*mCloudControllers)[i]->mLoc << " - " << (*mCloudControllers)[i]->indexMin << ", " << (*mCloudControllers)[i]->indexMax << endl;
+		controllerAlpha[i] = ((*mCloudControllers)[i]->controllerAlpha / ((*mCloudControllers)[i]->lifeLength/2));
+		if(controllerAlpha[i] > 1){
+			controllerAlpha[i] = 1 - (controllerAlpha[i] - 1);
+		}
+		//else{
+		//	controllerAlpha[i] = 1 - controllerAlpha[i];
+		//}
+
 		i++;
 	}
 }
 
-/*
- calculations
- */
 void CloudParticle::update()
 {
-	
-	
-	//##############
 	mFbo[mBufferIn].bindFramebuffer();
 	
 	//set viewport to fbo size
-	gl::setMatricesWindow( mFbo[0].getSize(), false ); // false to prevent vertical flipping
+	gl::setMatricesWindow( mFbo[0].getSize(), false ); 
 	gl::setViewport( mFbo[0].getBounds() );
 	
 	GLenum buffer[3] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_COLOR_ATTACHMENT2_EXT };
@@ -484,6 +486,8 @@ void CloudParticle::update()
 	mVelShader.uniform("controllers", controllers, 16);
 	mVelShader.uniform("controllerMinIndices", minIndices, 16);
 	mVelShader.uniform("controllerMaxIndices", maxIndices, 16);
+	mVelShader.uniform("controllerAlpha", controllerAlpha, 16);
+	
 	
 	//Hard coded - delete this TODO
 	mVelShader.uniform("controller1", (*mCloudControllers)[0]->mLoc / particleTexRes);
@@ -547,15 +551,7 @@ void CloudParticle::update()
 	mBufferOut = (mBufferIn + 1) % 2;
 }
 
-/*
- displays the last filled buffer
- */
 void CloudParticle::draw(){
-	//gl::setMatricesWindow( getWindowSize() );
-	//gl::setViewport( getWindowBounds() );
-	
-	//gl::clear( ColorA( 0.0f, 0.0f, 0.0f, 0.0f ) );
-	
 	gl::enableAlphaBlending();
 	glDisable(GL_DEPTH_TEST);
 	
@@ -592,26 +588,18 @@ void CloudParticle::draw(){
 	mPosShader.uniform("controllers", controllers, 16);
 	mPosShader.uniform("controllerMinIndices", minIndices, 16);
 	mPosShader.uniform("controllerMaxIndices", maxIndices, 16);
+	mPosShader.uniform("controllerAlpha", controllerAlpha, 16);
 	
-	//gl::color(ColorA(1.0f,1.0f,1.0f,0.0f));
 	gl::pushMatrices();
-	
-	//glScalef(getWindowWidth() / (float)PARTICLES , getWindowHeight() / (float)PARTICLES ,1.0f);
-	//glScalef(0.5, 0.5, 0.5);
-	//console() << "Loc: " << mLoc << endl;
 	gl::translate(mLoc);
-	// draw particles
 	gl::draw( mVbo );
 	gl::popMatrices();
-	
 	mPosShader.unbind();
-	
 	mSpriteTex.unbind();
-	
 	mFbo[mBufferIn].unbindTexture();
 
 
-	if(timeline().getCurrentTime() < fingerTrackerTimer + 10.0f  ){
+	//if(timeline().getCurrentTime() < fingerTrackerTimer + 10.0f  ){
 		float trackerScaleVal = ((sin(timeline().getCurrentTime())) + 2.0) / 7.0;
 		trackImg.enableAndBind();
 		for(int i = 0; i < maxFingers; i++){
@@ -624,7 +612,7 @@ void CloudParticle::draw(){
 			gl::popMatrices();
 		}
 		trackImg.disable();
-	}
+	//}
 
 
 

@@ -34,10 +34,18 @@ CloudController::CloudController(Vec2f loc, float ms, float mf, VectorSet* pc){
 	state = true;
 	indexMin = -1.0f;
 	indexMax = -1.0f;
+
+	lifeLength = randFloat(40.0f, 60.0f);
+	prevTime = 0.0f;
+	controllerAlpha = 1.0f;
 	
 	/*gl::pushMatrices();
 	 mCloudParticle = new CloudParticle();
 	 gl::popMatrices();*/
+}
+
+void CloudController::setPrevTime(){
+	prevTime = timeline().getCurrentTime();
 }
 
 void CloudController::setColor(Vec3f col)

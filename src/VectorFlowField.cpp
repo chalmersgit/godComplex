@@ -37,8 +37,8 @@ void VectorFlowField::setup()
 	float indexIncrement = 0.2f;
 	float currentMinIndex = 0.0f;
 	float currentMaxIndex = indexIncrement;
-	
-	for(int i = 0; i < 5; ++i){
+	int numControllers = 5;
+	for(int i = 0; i < numControllers; ++i){
 		glPushMatrix();
 		Vec2f loc = Vec2f(Rand::randFloat(0.0f, app::getWindowWidth()), Rand::randFloat(0.0f, app::getWindowHeight()));
 		CloudController* cloudController = new CloudController(loc, Rand::randFloat(0.1, 0.3), Rand::randFloat(0.01f, 0.01f), mParticleController);
@@ -61,7 +61,7 @@ void VectorFlowField::setup()
 		currentMaxIndex += indexIncrement;
 	}
 	numAliveControllers = 16;
-	mCloudParticle = new CloudParticle(mCloudControllers);
+	mCloudParticle = new CloudParticle(mCloudControllers, numControllers);
 	
 	
 	mDrawParticles = true;
@@ -198,21 +198,27 @@ void VectorFlowField::mouseUp( MouseEvent event ){
 
 
 void VectorFlowField::checkRespawn(){
-	if((timeline().getCurrentTime() - mPrevTimeController) > 30.0f){ //change timer to somewhat random/longer
-		//Respawn the controller
-		//mLoc = Vec2f(randFloat(0.0f, getWindowWidth()), randFloat(0.0f, getWindowHeight()));
-		
-		if(!mCloudControllers->empty()){
-			for(int i = 0; i < mCloudControllers->size(); i++){
-				//console() << "before respawn: " << (*mCloudControllers)[i]->mLoc << endl;
+	if(!mCloudControllers->empty()){
+		for(int i = 0; i < mCloudControllers->size(); i++){
+			(*mCloudControllers)[i]->controllerAlpha = timeline().getCurrentTime() - (*mCloudControllers)[i]->prevTime;
+			if((timeline().getCurrentTime() - (*mCloudControllers)[i]->prevTime) > (*mCloudControllers)[i]->lifeLength){
 				(*mCloudControllers)[i]->doRespawn();
-				//console() << "after respawn: " << (*mCloudControllers)[i]->mLoc << endl;
+				(*mCloudControllers)[i]->setPrevTime();
+				(*mCloudControllers)[i]->controllerAlpha = (*mCloudControllers)[i]->lifeLength;
 			}
 		}
-		
-		//Fade the following particles
+	}
+
+	/*
+	if((timeline().getCurrentTime() - mPrevTimeController) > 30.0f){
+		if(!mCloudControllers->empty()){
+			for(int i = 0; i < mCloudControllers->size(); i++){
+				(*mCloudControllers)[i]->doRespawn();
+			}
+		}
 		mPrevTimeController = timeline().getCurrentTime();
 	}
+	*/
 }
 
 
