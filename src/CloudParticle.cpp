@@ -2,7 +2,7 @@
 #include "cinder/Rand.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Timeline.h"
-#include <boost/lexical_cast.hpp>
+//#include <boost/lexical_cast.hpp>
 #include "cinder/params/Params.h"
 
 
@@ -23,7 +23,7 @@ CloudParticle::CloudParticle()
 
 }
 
-CloudParticle::CloudParticle(vector<CloudController*>* cc, int nc){
+CloudParticle::CloudParticle(shared_ptr<vector<shared_ptr<CloudController>>> cc, int nc){
 	mCloudControllers = cc;
 	activeControllersCount = nc;
 
@@ -117,15 +117,15 @@ void CloudParticle::setup()
 		minX = -200;
 		maxX = 200;
 		//Y
-		minY = 100;
-		maxY = 400;
+		minY = -100;
+		maxY = 200;
 
 		//Z - for table top
-		//minY = -200;
+		//minY = -500;
 		//maxY = 200;
 		console() << "4" << endl;
-		
-		mLeapController = new LeapController();
+
+		mLeapController = make_shared<LeapController>();
 		mController.addListener(*mLeapController);
 		console() << "5" << endl;
 	}
@@ -390,22 +390,26 @@ void CloudParticle::setup()
 	*/
 	//3
 	cloudCover = 0.5636;
-	cloudSharpness = 0.9690;
-	pointSize = 3.0;
-	cloudSize = 0.01;
+	cloudSharpness = 0.9718;
+	pointSize = 4.0;
+	cloudSize = 0.09;
 	testAlpha = 0.0;
 	noiseLevel = 1;
-	noiseMultiplier = 3;
+	noiseMultiplier = 16;
 	posDivide = 1;
 	velSpeed = 0.000010;
-	accTimer = 0.5;
-	fingerRadius = 783.0;
-	cloudWidth = 4.0;
-	cloudHeight = 2.0;
+	accTimer = 0.4;
+	fingerRadius = 700.0;
+	cloudWidth = 3.5;
+	cloudHeight = 2.5;
 	cloudColor = 1.0;
 
 	//load tracker
 	trackImg = gl::Texture(loadImage(loadResource( TRACK_IMG )));
+
+	//load vignette
+	vinImg = gl::Texture(loadImage(loadResource(VIN_IMG)));
+
 }
 
 void CloudParticle::setPos(Vec2f loc)
@@ -552,9 +556,8 @@ void CloudParticle::update()
 }
 
 void CloudParticle::draw(){
-	gl::enableAlphaBlending();
 	glDisable(GL_DEPTH_TEST);
-	
+
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 	
 	mFbo[mBufferIn].bindTexture(0,0);
@@ -599,8 +602,13 @@ void CloudParticle::draw(){
 	mFbo[mBufferIn].unbindTexture();
 
 
+	gl::pushMatrices();
+	gl::draw(vinImg, vinImg.getBounds());
+	gl::popMatrices();
+
+	
 	//if(timeline().getCurrentTime() < fingerTrackerTimer + 10.0f  ){
-		float trackerScaleVal = ((sin(timeline().getCurrentTime())) + 2.0) / 7.0;
+		float trackerScaleVal = ((sin(timeline().getCurrentTime())) + 2.0) / 15.0;
 		trackImg.enableAndBind();
 		for(int i = 0; i < maxFingers; i++){
 			gl::pushMatrices();
@@ -613,16 +621,17 @@ void CloudParticle::draw(){
 		}
 		trackImg.disable();
 	//}
+	
 
 
 
-
-	gl::disableAlphaBlending();
+	//gl::disableAlphaBlending();
 	
 
 	//mParams->draw();
-	mParams.draw();
+//	mParams.draw();
 }
+
 
 void CloudParticle::mouseDown( MouseEvent event ){
 	console() << event.getPos() << endl;

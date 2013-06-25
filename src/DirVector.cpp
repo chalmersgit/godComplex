@@ -17,19 +17,22 @@ DirVector::DirVector(Vec2f loc, Vec2f rotationVector){//, Vec2f initialDirection
 	mLoc = loc;
 	
 	mRotationVector = rotationVector;
+	mRotationVector.normalize();
 	mDir = Vec2f(1.0f, 0.0f);
 	mRadius = 4.0f;
 }
 
 void DirVector::update(const Channel32f &channel, const Vec2f &windDirection){
-	//console() << "Update1: << " << mDir << ", " << mRotationVector << endl;
-	
 	//mDir = Vec2f(1.0f, 0.0f);
 	
-	mDir = mRotationVector; //mouseLoc - mLoc;
+	mDir = windDirection;
+	mDir.x = mDir.x * cos(mRotationVector.x) + mDir.y * sin(mRotationVector.y);
+	mDir.y = mDir.x * sin(mRotationVector.x) - mDir.y * cos(mRotationVector.y);
+
 	mDir.safeNormalize();
-	//mDir.normalize();
-	
+
+
+
 	Vec2f newLoc = mLoc + mDir * 100.f;
 	newLoc.x = constrain(newLoc.x, 0.f, channel.getWidth() - 1.f);
 	newLoc.x = constrain(newLoc.x, 0.f, channel.getHeight() - 1.f);

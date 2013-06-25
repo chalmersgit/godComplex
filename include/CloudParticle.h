@@ -21,11 +21,12 @@
 #include "CloudController.h"
 #include "Resources.h"
 
-//#include "CloudController.h"
-
 #include "LeapController.h"
 
 #include "cinder/params/Params.h"
+
+#include <boost\shared_ptr.hpp>
+
 
 using namespace ci;
 using namespace std;
@@ -34,13 +35,13 @@ using namespace std;
 #define HEIGHT 1080 // Leap
 
 
-#define PARTICLES_X 1920 //This should be sqrt(WIDTH * HEIGHT)
-#define PARTICLES_Y 1920
+#define PARTICLES_X 1600 //This should be sqrt(WIDTH * HEIGHT)
+#define PARTICLES_Y 1600
 
 class CloudParticle {
 public:
 	CloudParticle();
-	CloudParticle(vector<CloudController*>*, int nc);
+	CloudParticle(shared_ptr<vector<shared_ptr<CloudController>>>, int nc);
 	void setup();
 	//void resize( ResizeEvent event );
 	void update();
@@ -48,7 +49,6 @@ public:
 	void initFBO();
 	void setPos(ci::Vec2f);
 	void updateGPUcloudControllers();
-	
 	void mouseDown(ci::app::MouseEvent event );
 	void mouseUp(ci::app::MouseEvent event );
 	void mouseDrag(ci::app::MouseEvent event );
@@ -71,9 +71,7 @@ public:
 
 	float cloudWidth;
 	float cloudHeight;
-	
 
-	
 	Vec2i currentWindowSize;
 	Perlin mPerlin;
 	Vec3f mVertPos;
@@ -111,7 +109,7 @@ public:
 	
 	
 	Controller		mController;
-	LeapController*	mLeapController;
+	shared_ptr<LeapController>	mLeapController;
 	ci::Vec2f			finger1;
 	ci::Vec2f			finger2;
 	ci::Vec2f			finger3;
@@ -124,7 +122,7 @@ public:
 	int maxFingers;
 	float fingerTrackerTimer;
 	
-	vector<CloudController*>* mCloudControllers;
+	shared_ptr<vector<shared_ptr<CloudController>>> mCloudControllers;
 	
 	TriMesh			mMesh;
 
@@ -148,6 +146,7 @@ public:
 
 	//tracker img
 	gl::Texture			trackImg;
+	gl::Texture			vinImg;
 	
 
 };

@@ -19,14 +19,15 @@ VectorSet::VectorSet()
 
 VectorSet::~VectorSet()
 {
-	/*
-	 if(mFlowLookUpTable != NULL){
-	 for (int i = 0; i < mXRes; i++){
-	 //console() << i << endl;
-	 free(mFlowLookUpTable[i]);
-	 }
-	 free(mFlowLookUpTable);
-	 }*/
+	if(mFlowLookUpTable != NULL){
+		for(int i = 0 ; i < mXRes ; ++i){
+			for(int j = 0 ; j < mYRes ; ++j){
+			   delete mFlowLookUpTable[i][j];
+			}
+			delete[] mFlowLookUpTable[i];
+		}
+		delete[] mFlowLookUpTable;
+	}
 }
 
 VectorSet::VectorSet(int res)
@@ -40,13 +41,21 @@ VectorSet::VectorSet(int res)
 	Vec2f v = Vec2f(0.05f, 0.05f);
 	float noise = perlin.fBm(v);
 	float angle = noise * 15.0f;
+	
 	float xoff = 0.1f;
 	for(int y=0; y<mYRes; y++){
 		float yoff = 0.1f;
 		for(int x=0; x<mXRes; x++){
 			float thetaX = cos(angle) * Rand::randFloat(0.0001, xoff);
 			float thetaY = sin(angle) * Rand::randFloat(0.0001, yoff);
-			
+
+			if(thetaX == 0){
+				thetaX = 0.001f;
+			}
+			if(thetaY == 0){
+				thetaY = 0.001f;
+			}
+
 			Vec2f rotationVector(thetaX, thetaY);
 			
 			addParticle(x, y, res, rotationVector);

@@ -2,6 +2,8 @@
 #include "cinder/gl/gl.h"
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
+#include "cinder/Font.h"
+#include "cinder/Text.h"
 
 #include <vector>
 
@@ -10,6 +12,7 @@
 #include "CloudController.h"
 #include "CloudParticle.h"
 
+#include <boost\shared_ptr.hpp>
 
 using namespace ci;
 using namespace std;
@@ -19,6 +22,7 @@ public:
 	void setup();
 	void update();
 	void draw();
+	void setDisplayUI();
 	void setDrawFlow(bool b);
 	void invokePrintFlowField();
 	void cloudControllerFollow();
@@ -30,23 +34,30 @@ public:
 	
 	Channel32f mChannel;
 	gl::Texture mTexture;
+	gl::Texture windDirectionIcon;
 	
-	VectorSet* mParticleController;
+	shared_ptr<VectorSet> mParticleController;
 	
 	int numAliveControllers;
-	vector<CloudController*>* mCloudControllers;
-	//CloudController* mCloudController; //NOTE: leave commented out
-	CloudParticle* mCloudParticle;
+	shared_ptr<vector<shared_ptr<CloudController>>> mCloudControllers;
+	shared_ptr<CloudParticle> mCloudParticle;
 	
 	bool mDrawParticles;
 	bool mDrawImage;
 	bool mDrawFlowField;
+	bool mDisplayUI;
 	
 	Vec2i mMouseLoc;
 	Vec2f mWindDirection;
 	
 	float mTheta;
 	float mPrevTime;
+	float gustPrevTime;
+	float offset;
 	
 	float mPrevTimeController;
+	
+	float windSpeed;
+	float windGust;
+
 };

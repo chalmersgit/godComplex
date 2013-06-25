@@ -16,22 +16,9 @@ float M_PI = 3.1415926535897932384626433832795;
 
 uniform vec2 mousePos;
 
-//Leap
 uniform vec2 leapFingersPos[40];
 uniform vec2 leapFingersVel[40];
 uniform int maxFingers;
-
-uniform vec2 finger1;
-uniform vec2 finger2;
-uniform vec2 finger3;
-uniform vec2 finger4;
-uniform vec2 finger5;
-
-uniform vec2 fingerVel1;
-uniform vec2 fingerVel2;
-uniform vec2 fingerVel3;
-uniform vec2 fingerVel4;
-uniform vec2 fingerVel5;
 
 uniform float fingerRadius;
 
@@ -41,12 +28,6 @@ uniform vec2 controllers[16];
 uniform float controllerMinIndices[16];
 uniform float controllerMaxIndices[16];
 uniform float controllerAlpha[16];
-
-
-uniform vec2 controller1;
-uniform vec2 controller2;
-uniform vec2 controller3;
-uniform vec2 controller4;
 
 uniform int checkUserInput;
 
@@ -63,26 +44,15 @@ uniform bool firstTime;
 uniform float cloudWidth;
 uniform float cloudHeight;
 
-/*
-To make clouds, we need to not use velocity applied to particles.
-The noise created by velocity makes it look like fur or hair.
-We should move positions + colour the positions. So we should get particles
-shaped like a cloud + the alpha shows multiple clumped spots in a single cloud.
-
-From this, we should get nice looking clouds that are static within themselves.
-THEN, we can start applying *some* velocity (very minor effects) to get some rumbling.
-*/
-
-//float shift = 0.2;
 vec3 constructSquare(vec3 ov, vec3 v, float shift){
-	if(ov.y >= 0.25 && ov.y < 0.5){ //move to top right
+	if(ov.y >= 0.25 && ov.y < 0.5){ 
 		v.y = v.y - 0.5;
 	}
-	else if(ov.y >= 0.5 && ov.y < 0.75){ //move to top left
+	else if(ov.y >= 0.5 && ov.y < 0.75){
 		v.y = v.y - 0.75;
 		v.x = v.x - shift;
 	}
-	else if(ov.y >= 0.75){ //move to bottom left
+	else if(ov.y >= 0.75){ 
 		v.y = v.y - 0.75;
 		v.x = v.x - shift;
 	}
@@ -107,7 +77,7 @@ vec3 addVariation(vec3 v, vec2 controller){
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
-//vec3 vel = vec3( 0.0, 0.0, 0.0);
+
 void main(){
 	vec3 pos = texture2D( positions, texCoord.st).rgb;
 	float mass = texture2D( positions, texCoord.st).a;
@@ -126,29 +96,7 @@ void main(){
 	noise += texture2D( noiseTex, (pos.xy+1)).rg;
 	noise += texture2D( noiseTex, (pos.xy+2)).rg;
 	noise += texture2D( noiseTex, (pos.xy+3)).rg;
-	//noise /= 4.0;
-	
-	//vel += vec3(noise.x,noise.y,0.0);
-	//vel.x += 0.001;
-	
-	
-	//Life/death cycle
-	
-	
-	/*
-	age += tStep;
-	if( age >= maxAge ){
-		vec3 origVel = texture2D(oVelocities, texCoord.st).rgb;
-		age = 0.0;
-		if(pos.x > 1.0 || pos.x < 0.0 || pos.y > 1.0 || pos.y < 0.0 ){
-			pos = origPos;
-		}
-		vel = origVel;
-	}
-	*/
-	
-	//vec3 tempPos = vec3(0, 0, 0);
-	//Shape particles
+
 	for(int i = 0; i < maxControllers; i++){
 		float maxValue = controllerMaxIndices[i];
 		if(maxValue >= 1.0){maxValue = 2.0;}
@@ -175,12 +123,7 @@ void main(){
 		vel += vec3(acc, 0.0)*decay;
 		decay -= tStep;
 	}
-	
-    //acc = vec2(0, -9.81); /* Constant acceleration: gravity */
-    //vel = vel + acc * dt;    /* New, timestep-corrected velocity */
-    //pos = pos + vel * dt;      /* New, timestep-corrected position */
-	
-	//Particle interaction
+
 	if(checkUserInput == -1){
 		float x = (mousePos.x - (scaleX*pos.x)) * (mousePos.x - (scaleX*pos.x));
 		float y = (mousePos.y - (scaleY*pos.y)) * (mousePos.y - (scaleY*pos.y));
@@ -190,39 +133,18 @@ void main(){
 		}
 	}
 	
-	//uniform vec2 leapFingersPos[40];
-	//uniform vec2 leapFingersVel[40];
-	
 	for(int i = 0; i < maxFingers; i++){
 		float x = (leapFingersPos[i].x - (scaleX*pos.x)) * (leapFingersPos[i].x - (scaleX*pos.x));
 		float y = (leapFingersPos[i].y - (scaleY*pos.y)) * (leapFingersPos[i].y - (scaleY*pos.y));
 		if( x+y < fingerRadius){
-			/*
 			float gradForce = 1 - ((x+y)/fingerRadius);
-			vec2 towardFingerCentre = vec2(leapFingersPos[i].x - (scaleX*pos.x),  leapFingersPos[i].y - (scaleY*pos.y));
-			acc += (towardFingerCentre * velSpeed) * gradForce;
-			decay = accTimer;
-			*/
-			
-			
-			float gradForce = 1 - ((x+y)/fingerRadius);
-			acc += (leapFingersVel[i] * velSpeed) * exp(gradForce);
+			acc += (leapFingersVel[i] * velSpeed) * gradForce;
 			decay = accTimer;
 		}
 	}
-	
-	
-	//Add noise to the particles
-	//pos.x += (vel.x);
-	//pos.y += (vel.y);
-    
-	//position + mass
+
 	gl_FragData[0] = vec4(pos, mass);
-    
-	//velocity + decay
 	gl_FragData[1] = vec4(vel, decay);
-    
-	//age information
 	gl_FragData[2] = vec4(age, maxAge, acc);
 }
 

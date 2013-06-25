@@ -5,23 +5,25 @@
 #include "VectorSet.h"
 #include <vector>
 
+#include <boost\shared_ptr.hpp>
+
 class CloudController {
 public:
 	CloudController();
-	CloudController(ci::Vec2f, float, float, VectorSet*);
+	CloudController(ci::Vec2f, float, float, shared_ptr<VectorSet>);
 	
 	void setColor(ci::Vec3f);
 	
-	void update();
+	void update(float ws, float wg);
 	void draw();
 	
 	void applyForce(ci::Vec2f);
-
+	void setMaxSpeed(float ms);
 	void setPrevTime();
 	void doRespawn();
 	void setIndex(float iMin, float iMax);
 	
-	VectorSet* mParticleController;
+	shared_ptr<VectorSet> mParticleController;
 	
 	//CloudParticle* mCloudParticle;
 	
